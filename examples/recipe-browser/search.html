@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cerca Ricette - Recipe Browser</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1>⊙ Cerca Ricette</h1>
+        <p>Trova la ricetta perfetta per te</p>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-link">⌂ Home</a>
+            <a href="categories.html" class="nav-link">⊞ Categorie</a>
+            <a href="search.html" class="nav-link active">⊙ Cerca</a>
+            <a href="random.html" class="nav-link">⊛ Casuale</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Sezione ricerca -->
+        <div class="search-section">
+            <h2 style="margin-bottom: 2rem; color: var(--text-dark);">Trova la tua ricetta ideale</h2>
+            
+            <!-- Schede di ricerca -->
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center;">
+                <button class="search-tab active" onclick="switchTab('name')" id="nameTab">
+                    ◐ Per Nome
+                </button>
+                <button class="search-tab" onclick="switchTab('ingredient')" id="ingredientTab">
+                    ◎ Per Ingrediente
+                </button>
+                <button class="search-tab" onclick="switchTab('area')" id="areaTab">
+                    ◒ Per Area
+                </button>
+                <button class="search-tab" onclick="switchTab('letter')" id="letterTab">
+                    ◉ Per Lettera
+                </button>
+            </div>
+
+            <!-- Form ricerca per nome -->
+            <div id="nameSearch" class="search-form active">
+                <div class="search-container">
+                    <input type="text" id="nameInput" class="search-input" placeholder="Inserisci il nome della ricetta (es. Arrabiata)">
+                    <button onclick="searchByName()" class="search-btn">⊙ Cerca</button>
+                </div>
+                <p style="color: var(--text-light); margin-top: 1rem; text-align: center;">
+                    Cerca ricette per nome. Puoi usare anche parole parziali.
+                </p>
+            </div>
+
+            <!-- Form ricerca per ingrediente -->
+            <div id="ingredientSearch" class="search-form">
+                <div class="search-container">
+                    <input type="text" id="ingredientInput" class="search-input" placeholder="Inserisci un ingrediente (es. chicken, tomato)">
+                    <button onclick="searchByIngredient()" class="search-btn">⊙ Cerca</button>
+                </div>
+                <p style="color: var(--text-light); margin-top: 1rem; text-align: center;">
+                    Trova ricette che contengono un ingrediente specifico.
+                </p>
+            </div>
+
+            <!-- Form ricerca per area -->
+            <div id="areaSearch" class="search-form">
+                <div class="search-container">
+                    <select id="areaSelect" class="search-input">
+                        <option value="">Caricamento aree...</option>
+                    </select>
+                    <button onclick="searchByArea()" class="search-btn">⊙ Cerca</button>
+                </div>
+                <p style="color: var(--text-light); margin-top: 1rem; text-align: center;">
+                    Esplora la cucina di diverse nazioni e regioni.
+                </p>
+            </div>
+
+            <!-- Form ricerca per lettera -->
+            <div id="letterSearch" class="search-form">
+                <div class="search-container">
+                    <select id="letterSelect" class="search-input">
+                        <option value="">Seleziona una lettera</option>
+                    </select>
+                    <button onclick="searchByLetter()" class="search-btn">⊙ Cerca</button>
+                </div>
+                <p style="color: var(--text-light); margin-top: 1rem; text-align: center;">
+                    Trova ricette che iniziano con una lettera specifica.
+                </p>
+            </div>
+        </div>
+
+        <!-- Risultati ricerca -->
+        <div id="searchResults" style="display: none;">
+            <div class="search-section">
+                <h3 id="resultsTitle" style="color: var(--text-dark);">Risultati della ricerca</h3>
+                <p id="resultsCount" style="color: var(--text-light);"></p>
+                <button onclick="clearResults()" class="btn btn-secondary" style="margin-top: 1rem;">
+                    ◐ Nuova Ricerca
+                </button>
+            </div>
+            <div id="resultsContainer" class="recipes-grid"></div>
+        </div>
+    </div>
+
+    <style>
+        .search-tab {
+            padding: 0.8rem 1.5rem;
+            background: var(--background-light);
+            color: var(--text-dark);
+            border: 2px solid transparent;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .search-tab:hover {
+            background: var(--primary-light);
+            color: var(--white);
+        }
+
+        .search-tab.active {
+            background: var(--primary-color);
+            color: var(--white);
+            border-color: var(--primary-dark);
+        }
+
+        .search-form {
+            display: none;
+        }
+
+        .search-form.active {
+            display: block;
+        }
+
+        select.search-input {
+            appearance: none;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            padding-right: 3rem;
+        }
+    </style>
+
+    <script>
+        const API_BASE = 'https://www.themealdb.com/api/json/v1/1/';
+        let currentSearchType = 'name';
+
+        // Cambia scheda di ricerca
+        function switchTab(type) {
+            // Rimuovi classe active da tutte le schede
+            document.querySelectorAll('.search-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.search-form').forEach(form => {
+                form.classList.remove('active');
+            });
+
+            // Aggiungi classe active alla scheda selezionata
+            document.getElementById(type + 'Tab').classList.add('active');
+            document.getElementById(type + 'Search').classList.add('active');
+            
+            currentSearchType = type;
+        }
+
+        // Ricerca per nome
+        async function searchByName() {
+            const query = document.getElementById('nameInput').value.trim();
+            if (!query) {
+                alert('Inserisci il nome di una ricetta');
+                return;
+            }
+
+            showLoading('Cercando ricette...');
+            
+            try {
+                const response = await fetch(`${API_BASE}search.php?s=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                displayResults(data.meals, `Ricette con "${query}"`, query);
+            } catch (error) {
+                showError('Errore nella ricerca per nome');
+            }
+        }
+
+        // Ricerca per ingrediente
+        async function searchByIngredient() {
+            const ingredient = document.getElementById('ingredientInput').value.trim();
+            if (!ingredient) {
+                alert('Inserisci un ingrediente');
+                return;
+            }
+
+            showLoading('Cercando ricette con questo ingrediente...');
+            
+            try {
+                const response = await fetch(`${API_BASE}filter.php?i=${encodeURIComponent(ingredient)}`);
+                const data = await response.json();
+                
+                displayResults(data.meals, `Ricette con "${ingredient}"`, ingredient);
+            } catch (error) {
+                showError('Errore nella ricerca per ingrediente');
+            }
+        }
+
+        // Ricerca per area
+        async function searchByArea() {
+            const area = document.getElementById('areaSelect').value;
+            if (!area) {
+                alert('Seleziona un\'area geografica');
+                return;
+            }
+
+            showLoading('Cercando ricette da questa regione...');
+            
+            try {
+                const response = await fetch(`${API_BASE}filter.php?a=${encodeURIComponent(area)}`);
+                const data = await response.json();
+                
+                displayResults(data.meals, `Ricette ${area}`, area);
+            } catch (error) {
+                showError('Errore nella ricerca per area');
+            }
+        }
+
+        // Ricerca per lettera
+        async function searchByLetter() {
+            const letter = document.getElementById('letterSelect').value;
+            if (!letter) {
+                alert('Seleziona una lettera');
+                return;
+            }
+
+            showLoading('Cercando ricette...');
+            
+            try {
+                const response = await fetch(`${API_BASE}search.php?f=${letter}`);
+                const data = await response.json();
+                
+                displayResults(data.meals, `Ricette che iniziano con "${letter.toUpperCase()}"`, letter);
+            } catch (error) {
+                showError('Errore nella ricerca per lettera');
+            }
+        }
+
+        // Mostra i risultati
+        function displayResults(meals, title, query) {
+            const resultsSection = document.getElementById('searchResults');
+            const resultsTitle = document.getElementById('resultsTitle');
+            const resultsCount = document.getElementById('resultsCount');
+            const resultsContainer = document.getElementById('resultsContainer');
+
+            resultsTitle.textContent = title;
+            resultsSection.style.display = 'block';
+            
+            if (meals && meals.length > 0) {
+                resultsCount.textContent = `${meals.length} ricette trovate`;
+                
+                resultsContainer.innerHTML = meals.map(meal => `
+                    <div class="recipe-card" onclick="window.location.href='recipe-detail.html?id=${meal.idMeal}'">
+                        <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="recipe-image">
+                        <div class="recipe-info">
+                            <h3 class="recipe-name">${meal.strMeal}</h3>
+                            ${meal.strCategory ? `<span class="recipe-category">${meal.strCategory}</span>` : ''}
+                            ${meal.strArea ? `<p class="recipe-area">◎ ${meal.strArea}</p>` : ''}
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Animazione fade-in
+                resultsContainer.querySelectorAll('.recipe-card').forEach((card, index) => {
+                    card.style.animationDelay = `${index * 0.05}s`;
+                    card.classList.add('fade-in');
+                });
+            } else {
+                resultsCount.textContent = 'Nessuna ricetta trovata';
+                resultsContainer.innerHTML = `
+                    <div class="no-results">
+                        ◒ Nessuna ricetta trovata per "${query}"
+                        <br><br>Prova con termini diversi o esplora le categorie.
+                    </div>
+                `;
+            }
+            
+            // Scroll ai risultati
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Mostra loading
+        function showLoading(message) {
+            const resultsSection = document.getElementById('searchResults');
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            resultsSection.style.display = 'block';
+            resultsContainer.innerHTML = `<div class="loading">${message}</div>`;
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Mostra errore
+        function showError(message) {
+            const resultsSection = document.getElementById('searchResults');
+            const resultsContainer = document.getElementById('resultsContainer');
+            
+            resultsSection.style.display = 'block';
+            resultsContainer.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        // Pulisci risultati
+        function clearResults() {
+            document.getElementById('searchResults').style.display = 'none';
+            document.getElementById('nameInput').value = '';
+            document.getElementById('ingredientInput').value = '';
+            document.getElementById('areaSelect').value = '';
+            document.getElementById('letterSelect').value = '';
+        }
+
+        // Carica le aree disponibili
+        async function loadAreas() {
+            try {
+                const response = await fetch(`${API_BASE}list.php?a=list`);
+                const data = await response.json();
+                
+                const select = document.getElementById('areaSelect');
+                select.innerHTML = '<option value="">Seleziona un\'area</option>' + 
+                    data.meals.map(area => 
+                        `<option value="${area.strArea}">${area.strArea}</option>`
+                    ).join('');
+            } catch (error) {
+                console.error('Errore nel caricamento aree:', error);
+            }
+        }
+
+        // Popola il select delle lettere
+        function populateLetters() {
+            const select = document.getElementById('letterSelect');
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            
+            select.innerHTML = '<option value="">Seleziona una lettera</option>' + 
+                letters.map(letter => 
+                    `<option value="${letter.toLowerCase()}">${letter}</option>`
+                ).join('');
+        }
+
+        // Gestione Enter per tutti gli input
+        function setupEnterHandlers() {
+            document.getElementById('nameInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchByName();
+            });
+            
+            document.getElementById('ingredientInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchByIngredient();
+            });
+        }
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAreas();
+            populateLetters();
+            setupEnterHandlers();
+            
+            // Controlla se c'è una query salvata
+            const savedQuery = localStorage.getItem('searchQuery');
+            if (savedQuery) {
+                document.getElementById('nameInput').value = savedQuery;
+                localStorage.removeItem('searchQuery');
+                searchByName();
+            }
+        });
+    </script>
+</body>
+</html>

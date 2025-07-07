@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ricette per Categoria - Recipe Browser</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="header">
+        <h1 id="categoryTitle">⊞ Ricette per Categoria</h1>
+        <p id="categorySubtitle">Tutte le ricette della categoria selezionata</p>
+    </header>
+
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-link">⌂ Home</a>
+            <a href="categories.html" class="nav-link">⊞ Categorie</a>
+            <a href="search.html" class="nav-link">⊙ Cerca</a>
+            <a href="random.html" class="nav-link">⊛ Casuale</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="search-section">
+            <button onclick="window.history.back()" class="btn btn-secondary" style="margin-bottom: 1rem;">
+                ◀ Torna alle Categorie
+            </button>
+            <h2 id="pageTitle" style="margin-bottom: 1rem; color: var(--text-dark);">Ricette</h2>
+            <p style="color: var(--text-light);" id="recipeCount">
+                Caricamento ricette...
+            </p>
+        </div>
+
+        <div id="recipesContainer" class="recipes-grid">
+            <div class="loading">Caricamento ricette...</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://www.themealdb.com/api/json/v1/1/';
+
+        // Ottieni il parametro categoria dall'URL
+        function getCategoryFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('category');
+        }
+
+        // Carica le ricette di una categoria
+        async function loadCategoryMeals(category) {
+            const container = document.getElementById('recipesContainer');
+            const categoryTitle = document.getElementById('categoryTitle');
+            const categorySubtitle = document.getElementById('categorySubtitle');
+            const pageTitle = document.getElementById('pageTitle');
+            const recipeCount = document.getElementById('recipeCount');
+            
+            // Aggiorna i titoli
+            categoryTitle.textContent = `📂 ${category}`;
+            categorySubtitle.textContent = `Tutte le ricette della categoria ${category}`;
+            pageTitle.textContent = `Ricette ${category}`;
+            
+            try {
+                const response = await fetch(`${API_BASE}filter.php?c=${encodeURIComponent(category)}`);
+                const data = await response.json();
+                
+                if (data.meals && data.meals.length > 0) {
+                    recipeCount.textContent = `${data.meals.length} ricette trovate in questa categoria`;
+                    
+                    container.innerHTML = data.meals.map(meal => `
+                        <div class="recipe-card" onclick="window.location.href='recipe-detail.html?id=${meal.idMeal}'">
+                            <img src="${meal.strMealThumb}" alt="${meal.strMeal}" class="recipe-image">
+                            <div class="recipe-info">
+                                <h3 class="recipe-name">${meal.strMeal}</h3>
+                                <span class="recipe-category">${category}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    // Aggiungi animazione fade-in
+                    container.querySelectorAll('.recipe-card').forEach((card, index) => {
+                        card.style.animationDelay = `${index * 0.05}s`;
+                        card.classList.add('fade-in');
+                    });
+                } else {
+                    recipeCount.textContent = 'Nessuna ricetta trovata in questa categoria';
+                    container.innerHTML = `
+                        <div class="no-results">
+                            😕 Nessuna ricetta trovata per la categoria "${category}"
+                            <br><br>
+                            <button onclick="window.location.href='categories.html'" class="btn">
+                                Torna alle Categorie
+                            </button>
+                        </div>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('Errore nel caricamento ricette:', error);
+                recipeCount.textContent = 'Errore nel caricamento';
+                container.innerHTML = `
+                    <div class="error">
+                        ❌ Errore nel caricamento delle ricette per "${category}". 
+                        <br>Controlla la connessione internet e ricarica la pagina.
+                        <br><br>
+                        <button onclick="window.location.reload()" class="btn">
+                            Ricarica Pagina
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Inizializza la pagina
+        document.addEventListener('DOMContentLoaded', function() {
+            const category = getCategoryFromURL();
+            
+            if (category) {
+                loadCategoryMeals(category);
+            } else {
+                document.getElementById('recipesContainer').innerHTML = `
+                    <div class="error">
+                        ❌ Categoria non specificata. 
+                        <br><br>
+                        <button onclick="window.location.href='categories.html'" class="btn">
+                            Vai alle Categorie
+                        </button>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
