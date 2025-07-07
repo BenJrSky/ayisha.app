@@ -705,7 +705,6 @@ pre::before {
 }
 
 code {
-  background: var(--surface-secondary);
   color: #000000;
   padding: 0.25rem 0.5rem;
   border-radius: var(--radius-sm);
@@ -2196,4 +2195,20 @@ no::before {
     padding: 1rem;
     font-size: 0.8rem;
   }
+}
+
+/* Carousel dot indicators */
+.dot-active {
+  background-color: var(--primary-color) !important;
+  transform: scale(1.2) !important;
+}
+
+.dot-inactive {
+  background-color: var(--border-color) !important;
+  transform: scale(1) !important;
+}
+
+.dot-inactive:hover {
+  background-color: var(--secondary-light) !important;
+  transform: scale(1.1) !important;
 }
