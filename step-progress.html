@@ -1,0 +1,6 @@
+<div class="step-progress-compact">
+  <div class="progress-bar-small">
+    <div class="progress-fill-small" @style="{width: (currentStep / 10) * 100 + '%'}"></div>
+  </div>
+  <span class="progress-percentage" @text="Math.round((currentStep / 10) * 100) + '%'"></span>
+</div>

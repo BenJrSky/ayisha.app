@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayisha.js - FAQ</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <component @src="header.html"></component>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-background"></div>
+      <div class="hero-content">
+        <img src="ayisha-logo-black.png" alt="Ayisha.js Logo" class="hero-logo">
+        <h1>Frequently Asked Questions</h1>
+        <p class="hero-subtitle">Find answers to common questions about Ayisha.js. Learn best practices and troubleshooting tips for better development.</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">10+</span>
+            <span class="stat-label">Questions</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Helpful</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">0</span>
+            <span class="stat-label">Confusion</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="philosophy">
+      <h2>Frequently Asked Questions</h2>
+      <init>
+        state.faqs = [
+          {
+            q: 'Does Ayisha.js work without a build step?',
+            a: 'Yes! Just add <code>&lt;script src="ayisha.js"&gt;&lt;/script&gt;</code> in your HTML and you can use all Ayisha.js directives directly, without any build or transpile step. You can write logic, state, and directives in plain HTML files, making it ideal for quick prototyping, demos, and static sites. No npm, no bundler, no config required.',
+            show: false
+          },
+          {
+            q: 'How do I manage state?',
+            a: 'You can declare any variable in <code>&lt;init&gt;</code> and use it directly in directives, without always writing <code>state.</code>. For example: <code>count = 0;</code> and then <code>@text="count"</code>. If you prefer, you can also use <code>state.name</code>, but it is not required. All variables declared in <code>&lt;init&gt;</code> are reactive and shared in the page.',
+            show: false
+          },
+          {
+            q: 'How does validation work?',
+            a: 'Use <b>@validate</b> on inputs for real-time validation. You can use built-in rules like <code>required</code>, <code>email</code>, <code>phone</code>, or custom regular expressions (e.g. <code>^[a-zA-Z]{3,}$</code>). The validation result is available in <code>_validate.fieldName</code> (true/false). You can combine multiple rules separated by a coma: <code>@validate="required, email"</code>. Validation works on <code>input</code> and <code>change</code> events.',
+            show: false
+          },
+          {
+            q: 'Can I create reusable components?',
+            a: 'Yes! You can include reusable HTML components with <code>&lt;component @src="file.html"&gt;&lt;/component&gt;</code>. You can also pass variables as <code>prop-</code> attributes and use <code>&lt;init&gt;</code> logic inside the component. Components are loaded dynamically and can be nested.',
+            show: false
+          },
+          {
+            q: 'How do I do SPA routing?',
+            a: 'Use <b>@page</b> to define sections/pages and <b>@link</b> on buttons or links to navigate without reloading. Example: <code>&lt;div @page="/about"&gt;About page&lt;/div&gt;</code> and <code>&lt;a @link="/about"&gt;Go to About&lt;/a&gt;</code>. The current page state is available in <code>currentPage</code>.',
+            show: false
+          },
+          {
+            q: 'Can I use fetch and dynamic data?',
+            a: 'Yes! With <b>@fetch</b> you can load data from REST APIs (even with dynamic variables in the URL) and with <b>@result</b> you store the response in a variable. You can use <b>@fetch:click</b> for fetch on event, <b>@fetch</b> for automatic fetch, and <b>@watch</b> to reload when a variable changes. Example: <code>&lt;div @fetch="https://api.com/data/{id}" @result="data" @watch="id"&gt;&lt;/div&gt;</code>.',
+            show: false
+          },
+          {
+            q: 'How do I debug?',
+            a: 'You can use <b>@log</b> on any element to see the state of variables and directives in the console. Also, <b>@state</b> shows the global reactive state directly in the page. You can also print variables with <code>{{variableName}}</code> anywhere in HTML.',
+            show: false
+          },
+          // removed: Is Ayisha.js suitable for large projects?
+          {
+            q: 'How do I use lists and loops?',
+            a: 'Use <b>@for</b> to iterate over arrays and render lists. Example: <code>&lt;li @for="item in items"&gt;{{item.name}}&lt;/li&gt;</code>. You can use <code>@key</code> for better performance and to help Ayisha.js track list items. Nested loops and index variables are also supported.',
+            show: false
+          },
+          {
+            q: 'How do I use conditional rendering?',
+            a: 'Use <b>@if</b> to show or hide elements based on expressions. Example: <code>&lt;div @if="count &gt; 0"&gt;Visible if count is positive&lt;/div&gt;</code>. You can also use <b>@show</b> for toggling visibility with <code>display:none</code> instead of removing from the DOM.',
+            show: false
+          },
+          {
+            q: 'How do I animate elements?',
+            a: 'Use <b>@animate</b> to add CSS animations or transitions when elements appear or change. Example: <code>&lt;div @if="showBox" @animate="fadeIn"&gt;&lt;/div&gt;</code>. You can define your own CSS animations and use them with @animate.',
+            show: false
+          },
+          {
+            q: 'How do I watch for variable changes?',
+            a: 'Use <b>@watch</b> to react to changes in any variable or expression. You can run code, fetch data, or update other variables. For example, <code>@watch="userId =&gt; fetchUser(userId)"</code> runs a function when <code>userId</code> changes. You can also use <code>@watch="userId"</code> to automatically re-fetch data or update the UI. Multiple watchers can be used in the same page, and you can watch arrays, objects, or computed values.',
+            show: false
+          },
+          {
+            q: 'How do I bind forms and inputs?',
+            a: 'Use <b>@model</b> for two-way data binding on inputs, selects, and textareas. This keeps your variable and the input value always in sync. You can use <code>@model</code> on text, number, checkbox, radio, select, and textarea. The variable updates automatically as the user types or changes the value. You can also use <code>@model:input</code> or <code>@model:change</code> to control when the update happens.',
+            show: false
+          },
+          {
+            q: 'How do I style elements dynamically?',
+            a: 'Use <b>@class</b> to bind one or more classes based on variables or expressions, and <b>@style</b> to bind inline styles. You can use objects, ternary operators, or any valid JavaScript. Example: <code>@class="{active: isActive, error: hasError}"</code> and <code>@style="{color: textColor, fontSize: fontSize + \"px\"}"</code>. This allows you to change the look of elements based on state, user actions, or data.',
+            show: false
+          },
+          {
+            q: 'How do I handle events?',
+            a: 'Use <b>@click</b>, <b>@input</b>, <b>@change</b>, <b>@focus</b>, <b>@blur</b>, and other event directives to run any JavaScript code when the user interacts with elements. You can increment counters, update state, call functions, or trigger fetches. You can also use sub-directives like <code>@click:ctrl</code> for modifier keys, or <code>@input:debounce</code> for debounced input handling. All standard DOM events are supported.',
+            show: false
+          }
+        ];
+      </init>
+      <div class="faq-list">
+        <div @for="i, faq in faqs" @key="i" class="faq-item" style="margin-bottom:0rem;">
+          <button @click="faqs.forEach((f, j) => f.show = (j === i ? !faq.show : false))" class="btn-primary" style="width:100%;text-align:left;font-size:1.1rem;padding:1rem;">
+            <span @text="faq.q"></span>
+            <span style="float:right;">{{faq.show ? '▲' : '▼'}}</span>
+          </button>
+          <div @show="faq.show" class="faq-answer" style="background:#f8fafc;padding:1rem 1.5rem;border-radius:0 0 12px 12px;border:1px solid #e5e7eb;border-top:none;">
+            <span>{{faq.a}}</span>
+          </div>
+        </div>
+      </div>
+  </main>
+  
+  <init>
+    _currentPage = 'faq';
+  </init>
+  <script src="https://cdn.jsdelivr.net/gh/BenJrSky/ayisha.js@main/dist/ayisha-1.0.0-min.js"></script>
+  <component @src="footer.html"></component>
+</body>
+</html>

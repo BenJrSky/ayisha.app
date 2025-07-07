@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayisha.js - Interactive Examples</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <component @src="header.html"></component>
+  <main class="container">
+    <div class="examples-container" style="max-width:1100px;margin:0 auto;padding:2rem 1rem;">
+      <section class="hero">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+          <img src="ayisha-logo-black.png" alt="Ayisha.js Logo" class="hero-logo">
+          <h1>Ayisha.js Practical Examples</h1>
+          <p class="hero-subtitle">Real-world, ready-to-use components for every sector. Copy the code or try the live demo below each example.</p>
+        </div>
+      </section>
+
+
+      <!-- MODAL EXAMPLE -->
+      <!-- (all examples moved inside .examples-container, with improved style) -->
+
+      <!-- MODAL EXAMPLE -->
+      <section class="example-block" style="background:#f8fafc;border-radius:12px;padding:2rem 1.5rem;margin-bottom:2.5rem;box-shadow:0 2px 12px #0001;">
+        <h2 style="margin-top:0">Modal Dialog</h2>
+        <div class="example-columns" style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start;">
+          <div class="example-code" style="flex:1 1 340px;min-width:320px;max-width:480px;">
+            <h4 style="margin-bottom:0.5em;color:#ffc400;">HTML Code</h4>
+            <pre style="background:#fffbe6;border-radius:8px;padding:1em 0.5em;"><code><no>
+<button @click="showModal = true">Open Modal</button>
+<div class="modal" @show="showModal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;">
+  <div style="background:#fff;padding:2rem;border-radius:8px;min-width:300px;">
+    <h3>Ayisha.js Modal</h3>
+    <p>This is a modal dialog.</p>
+    <button @click="showModal = false">Close</button>
+  </div>
+</div>
+</no></code></pre>
+          </div>
+          <div class="example-live" style="flex:1 1 340px;min-width:320px;max-width:480px;background:#fff;border-radius:8px;padding:1.5em;box-shadow:0 2px 8px #0001;">
+            <h4 style="margin-bottom:0.5em;color:#ffc400;">Live Demo</h4>
+            <button @click="showModal = true" class="btn-primary">Open Modal</button>
+            <div class="modal" @show="showModal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000;">
+              <div style="background:#fff;padding:2rem;border-radius:8px;min-width:300px;box-shadow:0 2px 16px #0003;">
+                <h3>Ayisha.js Modal</h3>
+                <p>This is a modal dialog.</p>
+                <button @click="showModal = false" class="btn-secondary">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOGIN FORM EXAMPLE -->
+      <section class="example-block" style="background:#f8fafc;border-radius:12px;padding:2rem 1.5rem;margin-bottom:2.5rem;box-shadow:0 2px 12px #0001;">
+        <h2 style="margin-top:0">Validated Login Form</h2>
+        <div class="example-columns" style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start;">
+          <div class="example-code" style="flex:1 1 340px;min-width:320px;max-width:480px;">
+            <h4 style="margin-bottom:0.5em;color:#ffc400;">HTML Code</h4>
+            <pre style="background:#fffbe6;border-radius:8px;padding:1em 0.5em;"><code><no>
+<form>
+  <input @model="email" @validate="email" placeholder="Email">
+  <input @model="password" @validate="password" placeholder="Password" type="password">
+  <button @click="console.log('Login', email, password)" @class="{ 'btn-primary': _validate.email && _validate.password, 'btn-secondary': !(_validate.email && _validate.password) }">Login</button>
+</form>
+<p>Email valid: <span @text="_validate.email ? '✔️' : '❌'"></span></p>
+<p>Password valid: <span @text="_validate.password ? '✔️' : '❌'"></span></p>
+</no></code></pre>
+          </div>
+          <div class="example-live" style="flex:1 1 340px;min-width:320px;max-width:480px;background:#fff;border-radius:8px;padding:1.5em;box-shadow:0 2px 8px #0001;">
+            <h4 style="margin-bottom:0.5em;color:#ffc400;">Live Demo</h4>
+            <form style="max-width:320px;margin-bottom:1em;">
+              <input @model="email" @validate="email" placeholder="Email" style="width:100%;margin-bottom:0.5em;">
+              <input @model="password" @validate="password" placeholder="Password" type="password" style="width:100%;margin-bottom:0.5em;">
+              <button @click="console.log('Login', email, password)" @class="{ 'btn-primary': _validate.email && _validate.password, 'btn-secondary': !(_validate.email && _validate.password) }" style="width:100%;">Login</button>
+            </form>
+            <div style="margin-bottom:0.5em;">
+              <span>Email valid: </span><span @text="_validate.email ? '✔️' : '❌'"></span>
+            </div>
+            <div>
+              <span>Password valid: </span><span @text="_validate.password ? '✔️' : '❌'"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CAROUSEL EXAMPLE -->
+      <section class="example-block" style="background:#f8fafc;border-radius:12px;padding:2rem 1.5rem;margin-bottom:2.5rem;box-shadow:0 2px 12px #0001;">
+        <h2 style="margin-top:0">Image Carousel</h2>
+        <div class="example-columns" style="display:flex;flex-wrap:wrap;gap:2rem;align-items:flex-start;">
+          <div class="example-code" style="flex:1 1 340px;min-width:320px;max-width:480px;">
+            <h4 style="margin-bottom:0.5em;color:#ffc400;">HTML Code</h4>
+            <pre style="background:#fffbe6;border-radius:8px;padding:1em 0.5em;"><code><no>
+<init>
+  state.images = [
+    'https://picsum.photos/id/1015/400/200',
+    'https://picsum.photos/id/1016/400/200',
+    'https://picsum.photos/id/1018/400/200'
+  ];
+  state.current = 0;
+</init>
+<div style="display:flex;align-items:center;gap:1rem;">
+  <button @click="current = (current-1+images.length)%images.length">⏪</button>
+  <img :src="images[current]" style="border-radius:8px;max-width:400px;">
+  <button @click="current = (current+1)%images.length">⏩</button>
+</div>
+<p>Image <span @text="current+1"></span> of <span @text="images.length"></span></p>
+</no></code></pre>
+          </div>
+          <div class="example-live" style="flex:1 1 340px;min-width:320px;max-width:480px;background:#fff;border-radius:8px;padding:1.5em;box-shadow:0 2px 8px #0001;">
+            <h4 style="margin-bottom:0.5em;color:#ffc400;">Live Demo</h4>
+            <div style="display:flex;align-items:center;gap:1rem;justify-content:center;">
+              <button @click="current = (current-1+images.length)%images.length" class="btn-secondary">⏪</button>
+              <img :src="images[current]" style="border-radius:8px;max-width:400px;box-shadow:0 2px 8px #0002;">
+              <button @click="current = (current+1)%images.length" class="btn-secondary">⏩</button>
+            </div>
+            <p style="text-align:center;">Image <span @text="current+1"></span> of <span @text="images.length"></span></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Add more examples here as needed, following the same style -->
+
+  <init>
+    _currentPage = 'examples';
+  </init>
+  <script src="https://cdn.jsdelivr.net/gh/BenJrSky/ayisha.js@main/dist/ayisha-1.0.0-min.js"></script>
+  <component @src="footer.html"></component>
+</body>
+</html>

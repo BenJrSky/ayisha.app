@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayisha.js - Directives Wiki</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <component @src="header.html"></component>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-background"></div>
+      <div class="hero-content">
+        <img src="ayisha-logo-black.png" alt="Ayisha.js Logo" class="hero-logo">
+        <h1>Directives Dictionary</h1>
+        <p class="hero-subtitle">Complete reference guide for all Ayisha.js directives, sub-directives, and special variables. Learn how to build reactive web applications with simple, powerful HTML-first syntax.</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">30+</span>
+            <span class="stat-label">Core Directives</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">HTML-first</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="philosophy">
+      <h2>Core Directives</h2>
+    <div class="wiki-dictionary">
+      <!-- wiki-divider removed -->
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@model</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Two-way binding)</span>
+          Creates a bidirectional data binding between an input element and a state property. When the user types or changes the input value, the state is automatically updated. When the state changes programmatically, the input value is automatically synchronized. This directive does not have sub-directives - it automatically handles all input events appropriately.<br>
+          <span class="wiki-spec">Use for: <i>form inputs, textareas, selects, checkboxes, radio buttons</i>. Always creates the state property if it doesn't exist. Works with any element that has a 'value' property.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><input @model="name"></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@click</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Event handler)</span>
+          Executes JavaScript code when the element is clicked. The expression has full access to the reactive <b>state</b> object and can perform complex operations, function calls, or state mutations. Supports multiple statements separated by semicolons or commas.<br>
+          <span class="wiki-spec">Use for: <i>buttons, links, any clickable elements</i>. Can execute multiple statements: <code>count++; name='clicked'</code>. Automatically triggers re-render after execution.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><button @click="count++">Increment</button></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@for</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Loop)</span>
+          Renders the element for each item in an array or object. Supports two syntaxes: <b>item in items</b> for value-only iteration, or <b>index, item in items</b> for index and value. When using the two-variable syntax, the first variable is always the index (starting from 0), the second is the item value. Automatically converts objects to arrays using Object.values(). Provides special context variables: <b>$index</b>, <b>$originalIndex</b>, and <b>$arrayName</b>.<br>
+          <span class="wiki-spec">Use for: <i>lists, tables, repeated UI patterns</i>. Always pair with <b>@key</b> for optimal performance and correct updates. Works with filtered arrays and maintains original array references for complex operations.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><li @for="item in items">{{item}}</li></no></code></pre></div>
+      <div class="wiki-entry-code"><pre><code><no><li @for="index, item in items">{{index}}</li></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@if</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Conditional rendering)</span>
+          Conditionally renders the element in the DOM only when the expression evaluates to truthy. When false, the element is completely removed from the DOM tree, including all event listeners and child components. This is different from <b>@show</b> which only toggles visibility.<br>
+          <span class="wiki-spec">Use for: <i>conditional components, error messages, optional content</i>. Best for content that should not exist in DOM when hidden. More efficient for large content blocks that are rarely shown.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @if="count>5">Many items!</div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@show</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Visibility toggle)</span>
+          Controls element visibility by setting <b>display: none</b> when the condition is false, but keeps the element in the DOM tree. Unlike <b>@if</b>, the element continues to exist and maintains its state, event listeners, and child components. Better for frequently toggled content.<br>
+          <span class="wiki-spec">Use for: <i>dropdown menus, modals, frequently toggled content</i>. Preserves element state and is more efficient for content that toggles often. Use instead of <b>@if</b> when you need to maintain component state.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @show="cond">Visible</div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@hide</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Inverse visibility)</span>
+          Hides the element by setting <b>display: none</b> when the condition is true - the opposite behavior of <b>@show</b>. The element remains in the DOM tree but becomes invisible when the condition evaluates to truthy. Useful for "hide when" logic instead of "show when".<br>
+          <span class="wiki-spec">Use for: <i>hiding elements based on conditions, error states, loading overlays</i>. Semantically clearer than <code>@show="!condition"</code> when you want to express hiding logic directly.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @hide="cond">Hidden</div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@fetch</dir-badge> <dir-badge>@result</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(HTTP requests)</span>
+          Performs asynchronous HTTP requests to the specified URL. The URL can be a string literal, a state variable, or a complex expression with interpolation (e.g., <code>/api/users/{userId}</code>). Always pair with <b>@result</b> to store the response data. Supports sub-directives for event-triggered requests like <b>@fetch:click</b>, <b>@fetch:hover</b>, <b>@fetch:change</b>. Automatically handles JSON parsing and error states.<br>
+          <span class="wiki-spec">Use for: <i>API calls, dynamic data loading, form submissions</i>. The <b>@result</b> variable will contain the parsed JSON response. Use <b>@fetch:click</b> for user-triggered requests. Supports URL interpolation with curly braces.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @fetch="url" @result="data"></div></no></code></pre></div>
+      <div class="wiki-entry-code"><pre><code><no><button @fetch:click="url" @result="data">Load</button></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@validate</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Input validation)</span>
+          Validates input values using 8 built-in validators or custom regex patterns. <b>Default validators:</b> <code>required</code> (non-empty), <code>email</code> (RFC standard), <code>phone</code> (international format), <code>password</code> (8+ chars, uppercase, lowercase, number, symbol) <b>Custom patterns:</b> Use <code>regex:pattern</code> or direct regex like <code>^[A-Z]\d{3}$</code>. Multiple rules separated by commas. Results stored in global <b>_validate</b> object. Requires <b>@model</b> for field binding.<br>
+          <span class="wiki-spec">Use for: <i>form validation, user input checking, data integrity</i>. Check <code>_validate.fieldName</code> for boolean validation status. Real-time validation on input/blur events. Combine multiple validators: <code>@validate="required,email,minLength:5"</code>.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><input @validate="email"></no></code></pre></div>
+      <div class="wiki-entry-code"><pre><code><no><input @validate="password"></no></code></pre></div>
+      <div class="wiki-entry-code"><pre><code><no><input @validate="required, phone"></no></code></pre></div>
+      <div class="wiki-entry-code"><pre><code><no><input @validate="^[A-Z]\d{3}$"></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@page</dir-badge> <dir-badge>@link</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(SPA routing system)</span>
+          Creates a single-page application routing system. <b>@page</b> marks an element as a route destination - it will only be shown when <b>_currentPage</b> matches its value. <b>@link</b> creates navigation links that update <b>_currentPage</b> without browser reload. The special value <code>@page=""</code> creates a default/home page. Navigation preserves all application state and provides instant transitions.<br>
+          <span class="wiki-spec">Use for: <i>multi-view applications, dashboards, wizards</i>. Access current route via <b>_currentPage</b> variable. Use <code>@link="pageName"</code> on buttons, links, or any clickable element. Automatically handles browser history and URL synchronization.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @page="home">Home</div></no></code></pre></div>
+      <div class="wiki-entry-code"><pre><code><no><div @page="about">About</div></no></code></pre></div>
+      <div class="wiki-entry-code"><pre><code><no><a @link="about">About</a></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@component</dir-badge> <dir-badge>@src</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Reusable components)</span>
+          Loads and renders external HTML files as reusable components. <b>@src</b> specifies the relative or absolute file path. Components inherit the parent's state and context, making them truly reactive. Supports dynamic loading based on state variables. Can be combined with <b>@page</b> for route-specific components and <b>@if</b> for conditional loading. Loaded content is cached for performance.<br>
+          <span class="wiki-spec">Use for: <i>modular UI architecture, shared components, layouts</i>. Keep components focused and small. Use path like <code>./header.html</code> or <code>components/modal.html</code>. Components can contain their own directives and sub-components.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><component @src="comp.html"></component></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@state</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Debug inspector)</span>
+          Displays the entire reactive state object as formatted JSON for debugging and development. Updates in real-time as state changes, showing current values of all state properties. Includes syntax highlighting and proper indentation for readability. Very useful during development to monitor state mutations.<br>
+          <span class="wiki-spec">Use for: <i>development debugging, state inspection, learning</i>. Remove from production builds. Shows the complete state tree including nested objects and arrays. Updates immediately when any state property changes.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @state></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@log</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Directive logger)</span>
+          Shows a comprehensive log of all directive activities on the current element. Displays directive execution, value changes, event triggers, and performance metrics with color-coded output. Tracks sub-directives and provides detailed debugging information including execution timing and data flow. Essential for understanding directive behavior and troubleshooting complex interactions.<br>
+          <span class="wiki-spec">Use for: <i>directive debugging, learning framework behavior, performance analysis</i>. Shows real-time directive execution with timestamps. Great for understanding the order of directive processing and data flow.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @log></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@class</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Dynamic CSS classes)</span>
+          Dynamically applies CSS classes based on object notation or string expressions. Object syntax: <code>{className: condition}</code> applies the class when condition is truthy. String syntax evaluates to class names. Supports sub-directives for event-based class changes like <b>@class:focus</b>, <b>@class:hover</b>, <b>@class:click</b>. Multiple classes can be applied simultaneously.<br>
+          <span class="wiki-spec">Use for: <i>conditional styling, interactive states, theme switching</i>. Object syntax: <code>{active: isActive, disabled: !enabled}</code>. String syntax: <code>"class1 class2"</code> or computed expressions. Works great with CSS transitions.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @class="{red: condition}"></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@style</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Dynamic inline styles)</span>
+          Dynamically sets inline CSS styles using object notation. Each key-value pair represents a CSS property and its value. Supports camelCase (backgroundColor) or kebab-case ('background-color') properties. Values can be computed expressions, state variables, or static values. Automatically handles units for numeric values where appropriate.<br>
+          <span class="wiki-spec">Use for: <i>dynamic styling, animations, responsive layouts</i>. Example: <code>{color: textColor, fontSize: size + 'px', display: showElement ? 'block' : 'none'}</code>. Great for user-customizable interfaces and dynamic themes.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @style="{color:'red'}"></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@set</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(State initialization)</span>
+          Sets initial values for state properties only on the first render, identical to <code><init></code> blocks but element-scoped. Use syntax <code>@set="variable=value"</code> for initialization. This is a one-time assignment that runs only when the element is first mounted - it does NOT update on subsequent renders or state changes. Unlike other directives, <b>@set</b> does not support sub-directives or event-based execution.<br>
+          <span class="wiki-spec">Use for: <i>component initialization, default values, element-specific state setup</i>. Runs once on mount only. For event-driven updates, use <b>@click</b> with assignments or other event directives.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code">
+        <pre><code><no><div @set="count = 4">Reset Counter</div></no></code></pre>
+        <pre><code><no><button @click="count = 0">Reset Counter</button></no></code></pre>
+      </div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@key</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Unique key)</span>
+          Provides a unique identifier for elements in <b>@for</b> loops to optimize DOM updates.<br>
+          <span class="wiki-spec">Use for: <i>lists, tables</i>. Always use with <b>@for</b> for best performance.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><li @for="item in items" @key="item.id"></li></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@switch</dir-badge> <dir-badge>@case</dir-badge> <dir-badge>@default</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Switch-case)</span>
+          Renders elements based on the value of an expression, similar to a switch-case statement. <b>@case</b> matches values, <b>@default</b> is the fallback.<br>
+          <span class="wiki-spec">Use for: <i>multi-state UI</i>. Combine with <b>@for</b> for advanced patterns.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @switch="val"><div @case="1">One</div><div @default>Other</div></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@source</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Array source)</span>
+          Provides the array to operate on. Use together with <b>@map</b>, <b>@filter</b>, <b>@reduce</b>, and <b>@result</b> to process and store the output.<br>
+          <span class="wiki-spec">Use for: <i>data transformation, computed lists</i>. Example: <code><div @source="items"></div></code></span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @source="items"></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@map</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Array map)</span>
+          Transforms each item in the array using the provided function. Use with <b>@source</b> and <b>@result</b>.<br>
+          <span class="wiki-spec">Example: <code><div @source="items" @map="item => item*2" @result="double"></div></code> — doubles each item in <b>items</b> and stores in <b>double</b>.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @source="items" @map="item => item*2" @result="double"></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@filter</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Array filtering)</span>
+          Filters array elements using a provided function or expression. Only items where the function returns truthy values are included in the result. Use with <b>@source</b> to specify the input array and <b>@result</b> to store the filtered output. The filter function receives each item as parameter and should return true/false.<br>
+          <span class="wiki-spec">Example: <code><div @source="items" @filter="item => item > 5" @result="filtered"></div></code> — keeps only items greater than 5.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @source="items" @filter="item => item > 5" @result="filtered"></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@reduce</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Array reduce)</span>
+          Reduces the array to a single value using a reducer function. The function receives an accumulator and current item, returning the new accumulator value. Use <b>@initial</b> to set the starting value and <b>@result</b> to store the final output.<br>
+          <span class="wiki-spec">Use for: <i>sums, aggregations, complex computations</i>. Example: <code><div @source="items" @reduce="(sum, item) => sum + item" @initial="0" @result="total"></div></code> — sums all items and stores in <b>total</b>.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @source="items" @reduce="(sum, item) => sum + item" @initial="0" @result="total"></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@initial</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Initial value)</span>
+          Sets the initial value for <b>@reduce</b> operations. This is the starting accumulator value that the reducer function will use in its first iteration.<br>
+          <span class="wiki-spec">Use for: <i>reduce operations</i>. Always pair with <b>@reduce</b>. Example: <code><div @source="items" @reduce="(sum, item) => sum + item" @initial="0" @result="total"></div></code> — starts with 0 for summing numbers.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @source="items" @reduce="(sum, item) => sum + item" @initial="0" @result="total"></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@animate</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Animation)</span>
+          Applies a CSS animation or transition to the element when it enters the DOM. The animation name should match a CSS animation defined in your stylesheet.<br>
+          <span class="wiki-spec">Use for: <i>visual effects, smooth transitions, UI polish</i>. Define the animation in CSS first, then reference it by name. Great for fade-ins, slide effects, and attention-grabbing animations.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @animate="fade-in"></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@watch</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(State watcher)</span>
+          Watches for changes in state variables and executes code when they change. Uses syntax <code>propertyName => code</code> or <code>propertyName : code</code>. The code has access to <b>newVal</b> parameter containing the new value. Can watch multiple properties by separating with commas.<br>
+          <span class="wiki-spec">Use for: <i>reactive side effects, logging, computed values, API calls on data change</i>. Example: <code><div @watch="count => console.log('Count changed to:', newVal)"></div></code> — logs when <b>count</b> changes.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @watch="prop=>console.log(prop)"></div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@hover</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Event handler)</span>
+          Executes code when the element is hovered. Perfect for showing tooltips, updating status variables, or triggering visual feedback. Can update multiple state variables in a single expression.<br>
+          <span class="wiki-spec">Use for: <i>tooltip triggers, hover states, preview loading</i>. Example: <code>showTooltip = true; previewData = item</code>. Combine with <b>@class:hover</b> for CSS styling.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @hover="showTooltip = true">Hover me</div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@text</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Dynamic text)</span>
+          Sets the text content of the element to the value of an expression or variable. For single expressions, displays the evaluated result. For multiple assignments (detected automatically), executes the code instead of displaying text. Supports sub-directives for event-based text updates.<br>
+          <span class="wiki-spec">Use for: <i>dynamic labels, counters, computed text</i>. Prefer over <b>{{ }}</b> interpolation for better performance. Handles null/undefined gracefully.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><span @text="name"></span></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@input</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Input event handler)</span>
+          Executes code when the element's <b>input</b> event is triggered. Perfect for real-time search, live validation, and instant updates. Access the current value via <code>event.target.value</code> or bind directly to state variables.<br>
+          <span class="wiki-spec">Use for: <i>live search filters, character counters, instant validation</i>. Example: <code>search = event.target.value; results = items.filter(i => i.includes(search))</code>. Updates on every keystroke.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><input @input="search = event.target.value"></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@change</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Change event handler)</span>
+          Executes code when the element's <b>change</b> event is triggered. Fires when an input loses focus after its value has been changed, or when select/checkbox values change. Perfect for final validation and processing.<br>
+          <span class="wiki-spec">Use for: <i>form validation, data processing, state updates</i>. Example: <code>isValid = event.target.value.length > 3; if(isValid) saveData()</code>. Fires only when user finishes editing.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><input @change="isValid = event.target.value.length > 3"></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@focus</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Focus event handler)</span>
+          Executes code when the element receives focus. Perfect for showing help text, clearing error messages, or highlighting form sections. Can update multiple state variables to enhance user experience.<br>
+          <span class="wiki-spec">Use for: <i>help text display, error clearing, UI highlighting</i>. Example: <code>helpVisible = true; errors = ''; activeField = 'username'</code>. Great for dynamic form behavior.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><input @focus="helpVisible = true; errors = ''"></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@blur</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Blur event handler)</span>
+          Executes code when the element loses focus. Perfect for hiding help text, saving form data, or capturing the final value for processing. Opposite behavior of <b>@focus</b>.<br>
+          <span class="wiki-spec">Use for: <i>hide help text, save data, capture final values</i>. Example: <code>helpVisible = false; lastValue = event.target.value; saveProgress()</code>. Triggers when user moves away from field.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><input @blur="helpVisible = false; lastValue = event.target.value"></no></code></pre></div>
+    </div>
+    </section>
+    
+    <section class="install">
+      <h2>Sub-directives & Events</h2>
+      <div class="wiki-dictionary">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@fetch:click</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Fetch on click)</span>
+          Executes a fetch request only when the element is clicked. Combines the power of <b>@click</b> and <b>@fetch</b> for user-initiated API calls. Use with <b>@result</b> to store the response data.<br>
+          <span class="wiki-spec">Use for: <i>load-on-demand, user-triggered API calls</i>. Perfect for buttons that fetch data when clicked.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><button @fetch:click="'/api/data'" @result="data">Load Data</button></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@text:click</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Text on click)</span>
+          Updates the element's text content when clicked. Perfect for toggle buttons, status indicators, or interactive labels that change on user interaction.<br>
+          <span class="wiki-spec">Use for: <i>toggle buttons, status changes, interactive labels</i>. Great for buttons that show different states or confirmation messages when clicked.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><button @text:click="'Clicked!'">Click me</button></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@text:hover</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Text on hover)</span>
+          Updates the element's text content only when the user hovers over it. Reverts to original text when hover ends. Perfect for interactive tooltips or dynamic labels.<br>
+          <span class="wiki-spec">Use for: <i>hover tooltips, interactive labels, context-sensitive help</i>. Great for buttons that show additional info on hover.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><div @text:hover="'Click for details'">Hover me</div></no></code></pre></div>
+      <hr class="wiki-divider">
+      <div class="wiki-entry-row">
+        <div class="wiki-entry-col-dir"><dir-badge>@class:focus</dir-badge></div>
+        <div class="wiki-entry-col-desc">
+          <span class="wiki-type">(Class on focus)</span>
+          Applies CSS classes only when the element receives focus. Removes the classes when focus is lost. Perfect for form styling and accessibility feedback.<br>
+          <span class="wiki-spec">Use for: <i>form input styling, focus indicators, accessibility</i>. Great for highlighting active form fields or providing visual focus feedback.</span>
+        </div>
+      </div>
+      <div class="wiki-entry-code"><pre><code><no><input @class:focus="{ 'border-blue': true, 'shadow': true }"></no></code></pre></div>
+      </div>
+    </section>
+    
+    <section class="hello-world">
+      <h2>Special Variables</h2>
+      <div class="special-var"><b>state</b>: Global reactive state object.</div>
+      <div class="special-var"><b>_validate</b>: Object with input validation results.</div>
+      <div class="special-var"><b>_currentPage</b>: Active page for SPA routing.</div>
+    </section>
+    
+    <section class="comparison">
+      <h2>Best Practices & Tips</h2>
+      <div class="best-practice">
+        <ul>
+          <li>Use <b>state</b> for all reactive variables and shared data between components.</li>
+          <li>Prefer <b>@model</b> for two-way binding with form inputs over manual event handling.</li>
+          <li>Use <b>@key</b> with <b>@for</b> loops for optimal performance and correct DOM updates.</li>
+          <li>For validation, combine <b>@validate</b> with <b>@model</b> and check <b>_validate</b> for results.</li>
+          <li>Use <b>@fetch</b> with <b>@result</b> for async data loading - they work together.</li>
+          <li>For SPA routing, use <b>@page</b> to define routes and <b>@link</b> for navigation.</li>
+          <li>Keep components small and focused - use <b>@component</b> with <b>@src</b> for reusability.</li>
+          <li>Use <b>@watch</b> for side effects and computed values, not for heavy logic.</li>
+          <li>Sub-directives (like <b>@fetch:click</b>) combine base functionality with event triggers.</li>
+          <li>Use <b>@set</b> for one-time initialization only - it works like <b><init></b> blocks.</li>
+          <li>For debugging, use <b>@state</b> and <b>@log</b> to inspect state and directive flow.</li>
+          <li>Most directives can be freely combined on any element for complex behavior.</li>
+          <li>Use <b>@animate</b> for smooth transitions - define CSS animations first.</li>
+          <li>Prefer <b>@text</b> over <b>{{ }}</b> interpolation for better performance.</li>
+          <li>Use <b>@if</b> to remove elements from DOM, <b>@show</b>/<b>@hide</b> to toggle visibility.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+  <init>
+    _currentPage = 'wiki';
+  </init>
+  <script src="https://cdn.jsdelivr.net/gh/BenJrSky/ayisha.js@main/dist/ayisha-1.0.0-min.js"></script>
+  <component @src="footer.html"></component>
+</body>
+</html>

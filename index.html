@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayisha.js - Welcome</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <component @src="header.html"></component>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-background"></div>
+      <div class="hero-content">
+        <img src="ayisha-logo-black.png" alt="Ayisha.js Logo" class="hero-logo">
+        <h1>Ayisha.js</h1>
+        <p class="hero-subtitle">HTML-first. Zero build. Pure joy.</p>
+        <a href="/site/tutorial.html" class="cta">Get Started</a>
+      </div>
+    </section>
+
+    <section class="philosophy">
+      <h2>Philosophy</h2>
+      <p><strong>Ayisha.js</strong> is a micro VDOM framework for web apps, with no build step, using HTML syntax and directives inspired by Vue/Angular. Perfect for prototypes, demos, landing pages, and lightweight apps.</p>
+      <ul>
+        <li>Ultra lightweight: only 20KB</li>
+        <li>No build, no dependencies</li>
+        <li>Simple and powerful directives</li>
+        <li>Native SPA routing</li>
+        <li>Reusable HTML components</li>
+        <li>Reactive state and automatic binding</li>
+      </ul>
+    </section>
+
+    <section class="install">
+      <h2>Quick Install</h2>
+      <pre><code><no><script src="/ayisha.js"></script></no></code></pre>
+      <p>Discover all features in the <a href="/site/wiki.html">Directives Wiki</a> or follow the <a href="/site/tutorial.html">Step-by-step Tutorial</a>.</p>
+    </section>
+
+    <section class="hello-world">
+      <h2>Hello World Example</h2>
+      <pre><code><no><div class="hello-inline">
+    <input @model="name" placeholder="Type your name...">
+    <p @if="name.length"> Hello, strong {{ name }} strong !</p>
+    <p @show="name.length==0"> What's your name?</p>
+  </div>
+</no></code></pre>
+      <div class="hello-inline">
+        <input @model="name" placeholder="Type your name...">
+        <p @if="name.length">Hello, <strong>{{ name }}</strong>!</p>
+        <p @show="!name || name.length==0">What's your name?</p>
+      </div>
+      <p style="margin-top:1em;">This example uses <code>@model</code> for two-way binding. The input and greeting are on the same line for a modern look.</p>
+    </section>
+
+    <section class="comparison">
+      <h2>Why Ayisha.js?</h2>
+      <div class="landing">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th style="font-size:1em;">Feature</th>
+            <th>Ayisha.js</th>
+            <th>React.js</th>
+            <th>Vue.js</th>
+            <th>jQuery</th>
+            <th>Alpine.js</th>
+            <th>Svelte</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="feature-label">Bundle Size</td>
+            <td data-label="Ayisha.js"><div class="icon-text"><span title="Excellent" class="icon-green">✔️</span><span class="icon-label">~20KB</span></div></td>
+            <td data-label="React"><div class="icon-text"><span title="Large" class="icon-red">❌</span><span class="icon-label">~40KB+</span></div></td>
+            <td data-label="Vue"><div class="icon-text"><span title="Large" class="icon-red">❌</span><span class="icon-label">~33KB+</span></div></td>
+            <td data-label="jQuery"><div class="icon-text"><span title="Medium" class="icon-orange">➖</span><span class="icon-label">~30KB</span></div></td>
+            <td data-label="Alpine.js"><div class="icon-text"><span title="Tiny" class="icon-green">✔️</span><span class="icon-label">~10KB</span></div></td>
+            <td data-label="Svelte"><div class="icon-text"><span title="Tiny" class="icon-green">✔️</span><span class="icon-label">~10KB</span></div></td>
+          </tr>
+          <tr>
+            <td class="feature-label">Build Step</td>
+            <td data-label="Ayisha.js"><div class="icon-text"><span title="No build step" class="icon-green">✔️</span><span class="icon-label">None</span></div></td>
+            <td data-label="React"><div class="icon-text"><span title="Required" class="icon-red">❌</span><span class="icon-label">Required</span></div></td>
+            <td data-label="Vue"><div class="icon-text"><span title="Optional" class="icon-orange">➖</span><span class="icon-label">Optional</span></div></td>
+            <td data-label="jQuery"><div class="icon-text"><span title="No build step" class="icon-green">✔️</span><span class="icon-label">None</span></div></td>
+            <td data-label="Alpine.js"><div class="icon-text"><span title="No build step" class="icon-green">✔️</span><span class="icon-label">None</span></div></td>
+            <td data-label="Svelte"><div class="icon-text"><span title="Required" class="icon-red">❌</span><span class="icon-label">Required</span></div></td>
+          </tr>
+          <tr>
+            <td class="feature-label">HTML-first</td>
+            <td data-label="Ayisha.js"><div class="icon-text"><span title="Yes" class="icon-green">✔️</span><span class="icon-label">Yes</span></div></td>
+            <td data-label="React"><div class="icon-text"><span title="No" class="icon-red">❌</span><span class="icon-label">No</span></div></td>
+            <td data-label="Vue"><div class="icon-text"><span title="Yes" class="icon-green">✔️</span><span class="icon-label">Yes</span></div></td>
+            <td data-label="jQuery"><div class="icon-text"><span title="Yes" class="icon-green">✔️</span><span class="icon-label">Yes</span></div></td>
+            <td data-label="Alpine.js"><div class="icon-text"><span title="Yes" class="icon-green">✔️</span><span class="icon-label">Yes</span></div></td>
+            <td data-label="Svelte"><div class="icon-text"><span title="No" class="icon-red">❌</span><span class="icon-label">No</span></div></td>
+          </tr>
+          <tr>
+            <td class="feature-label">Directives</td>
+            <td data-label="Ayisha.js"><div class="icon-text"><span title="Vue/Angular-style" class="icon-green">✔️</span><span class="icon-label">Vue/Angular-style</span></div></td>
+            <td data-label="React"><div class="icon-text"><span title="JSX/Props" class="icon-orange">➖</span><span class="icon-label">JSX/Props</span></div></td>
+            <td data-label="Vue"><div class="icon-text"><span title="Vue-style" class="icon-green">✔️</span><span class="icon-label">Vue-style</span></div></td>
+            <td data-label="jQuery"><div class="icon-text"><span title="jQuery API" class="icon-orange">➖</span><span class="icon-label">jQuery API</span></div></td>
+            <td data-label="Alpine.js"><div class="icon-text"><span title="Alpine-style" class="icon-green">✔️</span><span class="icon-label">Alpine-style</span></div></td>
+            <td data-label="Svelte"><div class="icon-text"><span title="Svelte syntax" class="icon-green">✔️</span><span class="icon-label">Svelte syntax</span></div></td>
+          </tr>
+          <tr>
+            <td class="feature-label">SPA Routing</td>
+            <td data-label="Ayisha.js"><div class="icon-text"><span title="Built-in" class="icon-green">✔️</span><span class="icon-label">Built-in</span></div></td>
+            <td data-label="React.js"><div class="icon-text"><span title="Via library" class="icon-orange">➖</span><span class="icon-label">Via library</span></div></td>
+            <td data-label="Vue.js"><div class="icon-text"><span title="Via library" class="icon-orange">➖</span><span class="icon-label">Via library</span></div></td>
+            <td data-label="jQuery"><div class="icon-text"><span title="No" class="icon-red">❌</span><span class="icon-label">No</span></div></td>
+            <td data-label="Alpine.js"><div class="icon-text"><span title="No" class="icon-red">❌</span><span class="icon-label">No</span></div></td>
+            <td data-label="Svelte"><div class="icon-text"><span title="Via library" class="icon-orange">➖</span><span class="icon-label">Via library</span></div></td>
+          </tr>
+          <tr>
+            <td class="feature-label">Components</td>
+            <td data-label="Ayisha.js"><div class="icon-text"><span title="HTML includes" class="icon-green">✔️</span><span class="icon-label">HTML includes</span></div></td>
+            <td data-label="React"><div class="icon-text"><span title="JSX/Components" class="icon-orange">➖</span><span class="icon-label">JSX/Components</span></div></td>
+            <td data-label="Vue"><div class="icon-text"><span title="Vue SFC" class="icon-green">✔️</span><span class="icon-label">Vue SFC</span></div></td>
+            <td data-label="jQuery"><div class="icon-text"><span title="None" class="icon-red">❌</span><span class="icon-label">None</span></div></td>
+            <td data-label="Alpine.js"><div class="icon-text"><span title="HTML includes" class="icon-green">✔️</span><span class="icon-label">HTML includes</span></div></td>
+            <td data-label="Svelte"><div class="icon-text"><span title="Svelte SFC" class="icon-green">✔️</span><span class="icon-label">Svelte SFC</span></div></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+  </main>
+
+  <init>
+    _currentPage = 'home';
+  </init>
+  <script src="https://cdn.jsdelivr.net/gh/BenJrSky/ayisha.js@main/dist/ayisha-1.0.0-min.js"></script>
+  <component @src="footer.html"></component>
+</body>
+</html>

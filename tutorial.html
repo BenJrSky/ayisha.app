@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ayisha.js - Interactive Tutorial</title>
+  <link rel="stylesheet" href="site.css">
+</head>
+
+<body>
+  <component @src="header.html"></component>
+  <main class="container">
+    <section class="hero">
+      <div class="hero-background"></div>
+      <div class="hero-content">
+        <img src="ayisha-logo-black.png" alt="Ayisha.js Logo" class="hero-logo">
+        <h1>Build Your First PROJECT</h1>
+        <p class="hero-subtitle">Learn Ayisha.js by building a complete blog step by step. From basics to advanced
+          features, master reactive programming with hands-on practice.</p>
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-number">10</span>
+            <span class="stat-label">Interactive Steps</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">Live</span>
+            <span class="stat-label">Code Examples</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main class="container">
+
+      <!-- Step 1: Setup and Basic Structure -->
+      <section class="tutorial-step" @show="currentStep == 1">
+        <div>
+          <span class="step-number">1</span>
+          <h2 class="step-title">Setup & Basic HTML Structure</h2>
+        </div>
+        <p class="step-description">
+          Let's start by creating the basic HTML structure for our blog. We'll include Ayisha.js and set up the initial
+          layout.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - Basic Setup</h4>
+          <div class="code-explanation">
+            &lt;script src="ayisha.js"&gt;&lt;/script&gt;
+            &lt;init&gt;
+            state.blogTitle = 'My Amazing Blog';
+            state.author = 'Your Name';
+            &lt;/init&gt;
+          </div>
+
+          <div style="text-align: center; padding: 2rem; background: #f8fafc; border-radius: 8px;">
+            <h1 @text="blogTitle"></h1>
+            <p>by <span @text="author"></span></p>
+          </div>
+
+          <div style="margin-top: 1rem;">
+            <input @model="blogTitle" placeholder="Enter blog title" style="width: 100%; margin-bottom: 0.5rem;">
+            <input @model="author" placeholder="Enter your name" style="width: 100%;">
+          </div>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no><h1 @text="blogTitle"></h1>
+<p>by <span @text="author"></span></p>
+<input @model="blogTitle" placeholder="Enter blog title">
+<input @model="author" placeholder="Enter your name"></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ <span class="highlight">@text</span> directive displays dynamic content and <span
+            class="highlight">@model</span> creates two-way data binding!</p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+      <!-- Step 2: Adding State and Reactivity -->
+      <section class="tutorial-step" @show="currentStep == 2">
+        <div>
+          <span class="step-number">2</span>
+          <h2 class="step-title">Adding State & Reactivity</h2>
+        </div>
+        <p class="step-description">
+          Now let's add some interactive elements to our blog. We'll create a visitor counter and a welcome message.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - Interactive Elements</h4>
+
+          <div style="text-align: center; padding: 2rem; background: #f8fafc; border-radius: 8px;">
+            <h3>Welcome to <span @text="blogTitle"></span>!</h3>
+            <p>Visitors: <strong @text="visitors"></strong></p>
+            <button @click="visitors++" class="btn-primary">👋 I'm visiting!</button>
+            <button @click="visitors=0" class="btn-secondary">Reset counter</button>
+          </div>
+
+          <div style="margin-top: 1rem;">
+            <p>Current visitor count: <span @text="visitors"></span></p>
+          </div>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no><h3>Welcome to <span @text="blogTitle"></span>!</h3>
+<p>Visitors: <strong @text="visitors"></strong></p>
+<button @click="visitors++" class="btn-primary">👋 I'm visiting!</button>
+<button @click="visitors=0" class="btn-secondary">Reset counter</button></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ <span class="highlight">@click</span> directive executes JavaScript when elements are clicked. State updates
+          trigger automatic re-renders!</p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+      <!-- Step 3: Working with Lists -->
+      <section class="tutorial-step" @show="currentStep == 3">
+        <div>
+          <span class="step-number">3</span>
+          <h2 class="step-title">Creating Dynamic Lists</h2>
+        </div>
+        <p class="step-description">
+          Let's create a simple blog post list. We'll use the <span class="highlight">@for</span> directive to iterate
+          over an array of posts.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - Blog Post List</h4>
+
+          <div style="margin-bottom: 1rem;">
+            <input @model="newPostTitle" placeholder="Enter post title" style="width: 70%; margin-right: 0.5rem;">
+            <button
+              @click="posts.push({id: Date.now(), title: newPostTitle, content: 'This is the content...', likes: 0}); newPostTitle = ''"
+              class="btn-primary">Add Post</button>
+          </div>
+
+          <div @for="post in posts" @key="post.id" class="blog-post">
+            <h3 @text="post.title"></h3>
+            <p @text="post.content"></p>
+            <div class="blog-actions">
+              <button @click="post.likes++" class="btn-like">❤️ <span @text="post.likes"></span></button>
+              <button @click="posts = posts.filter(p => p.id !== post.id)" class="btn-delete">🗑️ Delete</button>
+            </div>
+          </div>
+
+          <p @if="posts.length === 0" style="text-align: center; color: #6b7280; padding: 2rem;">
+            No posts yet. Add your first post above! 📝
+          </p>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no><input @model="newPostTitle" placeholder="Enter post title">
+<button @click="posts.push({id: Date.now(), title: newPostTitle, content: 'This is the content...', likes: 0}); newPostTitle = ''">Add Post</button>
+
+<div @for="post in posts" @key="post.id">
+  <h3 @text="post.title"></h3>
+  <p @text="post.content"></p>
+  <button @click="post.likes++">❤️ <span @text="post.likes"></span></button>
+  <button @click="posts = posts.filter(p => p.id !== post.id)">🗑️ Delete</button>
+</div>
+
+<p @if="posts.length === 0">No posts yet. Add your first post above! 📝</p></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ <span class="highlight">@for</span> creates dynamic lists and <span class="highlight">@key</span> ensures
+          optimal performance. <span class="highlight">@if</span> conditionally renders elements!</p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+      <!-- Step 4: Conditional Rendering -->
+      <section class="tutorial-step" @show="currentStep == 4">
+        <div>
+          <span class="step-number">4</span>
+          <h2 class="step-title">Conditional Rendering & User Interactions</h2>
+        </div>
+        <p class="step-description">
+          Let's add more sophisticated interactions. We'll implement post editing and show/hide functionality.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - Interactive Posts</h4>
+
+          <div @for="post in posts" @key="post.id" class="blog-post">
+            <div @if="!post.editing">
+              <h3 @text="post.title"></h3>
+              <p @text="post.content"></p>
+              <div class="blog-actions">
+                <button @click="post.likes++" class="btn-like">❤️ <span @text="post.likes"></span></button>
+                <button @click="post.editing = true; post.editTitle = post.title; post.editContent = post.content"
+                  class="btn-edit">✏️ Edit</button>
+                <button @click="posts = posts.filter(p => p.id !== post.id)" class="btn-delete">🗑️ Delete</button>
+              </div>
+            </div>
+
+            <div @if="post.editing">
+              <input @model="post.editTitle" style="width: 100%; margin-bottom: 0.5rem;" placeholder="Edit title">
+              <textarea @model="post.editContent" style="width: 100%; height: 100px; margin-bottom: 0.5rem;"
+                placeholder="Edit content"></textarea>
+              <div class="blog-actions">
+                <button @click="post.title = post.editTitle; post.content = post.editContent; post.editing = false"
+                  class="btn-primary">💾 Save</button>
+                <button @click="post.editing = false" class="btn-secondary">❌ Cancel</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no><div @for="post in posts" @key="post.id">
+  <div @if="!post.editing">
+    <h3 @text="post.title"></h3>
+    <p @text="post.content"></p>
+    <button @click="post.likes++">❤️ <span @text="post.likes"></span></button>
+    <button @click="post.editing = true; post.editTitle = post.title; post.editContent = post.content">✏️ Edit</button>
+  </div>
+  
+  <div @if="post.editing">
+    <input @model="post.editTitle" placeholder="Edit title">
+    <textarea @model="post.editContent" placeholder="Edit content"></textarea>
+    <button @click="post.title = post.editTitle; post.content = post.editContent; post.editing = false">💾 Save</button>
+    <button @click="post.editing = false">❌ Cancel</button>
+  </div>
+</div></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ <span class="highlight">@if</span> conditionally shows/hides elements. Complex expressions work perfectly
+          for interactive UIs!</p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+      <!-- Step 5: HTTP Requests with JSONPlaceholder -->
+      <section class="tutorial-step" @show="currentStep == 5">
+        <div>
+          <span class="step-number">5</span>
+          <h2 class="step-title">Loading Data from APIs</h2>
+        </div>
+        <p class="step-description">
+          Let's load real blog posts from JSONPlaceholder API. We'll use the <span class="highlight">@fetch</span>
+          directive to make HTTP requests.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - API Integration</h4>
+
+          <div style="margin-bottom: 1rem;">
+            <button @fetch:click="https://jsonplaceholder.typicode.com/posts" @result="apiPosts" class="btn-primary">📡
+              Load Posts from API</button>
+            <button @click="apiPosts = []" class="btn-secondary">Clear Posts</button>
+          </div>
+
+          <div @if="apiPosts && apiPosts.length > 0">
+            <h4>Posts from JSONPlaceholder API:</h4>
+            <div @for="post in apiPosts.slice(0, 5)" @key="post.id" class="blog-post">
+              <h3 @text="post.title"></h3>
+              <p @text="post.body"></p>
+              <div class="blog-post-meta">
+                User ID: <span @text="post.userId"></span> | Post ID: <span @text="post.id"></span>
+              </div>
+            </div>
+          </div>
+
+          <p @if="!apiPosts || apiPosts.length === 0" style="text-align: center; color: #6b7280; padding: 2rem;">
+            Click the button above to load posts from the API! 🚀
+          </p>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no><button @fetch:click="https://jsonplaceholder.typicode.com/posts" @result="apiPosts">📡 Load Posts from API</button>
+<button @click="apiPosts = []">Clear Posts</button>
+
+<div @if="apiPosts && apiPosts.length > 0">
+  <h4>Posts from JSONPlaceholder API:</h4>
+  <div @for="post in apiPosts.slice(0, 5)" @key="post.id">
+    <h3 @text="post.title"></h3>
+    <p @text="post.body"></p>
+    <div>User ID: <span @text="post.userId"></span> | Post ID: <span @text="post.id"></span></div>
+  </div>
+</div></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ <span class="highlight">@fetch:click</span> makes HTTP requests on user interaction. <span
+            class="highlight">@result</span> stores the response data!</p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+      <!-- Step 6: Dynamic User Loading -->
+      <section class="tutorial-step" @show="currentStep == 6">
+        <div>
+          <span class="step-number">6</span>
+          <h2 class="step-title">Dynamic User Loading</h2>
+        </div>
+        <p class="step-description">
+          Let's load user information dynamically based on user selection. We'll combine multiple API calls.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - User Selection</h4>
+
+          <div style="margin-bottom: 1rem;">
+            <label>Select User ID (1-10): </label>
+            <select @model="selectedUserId" style="margin-right: 1rem;">
+              <option value="">Choose user...</option>
+              <option value="1">User 1</option>
+              <option value="2">User 2</option>
+              <option value="3">User 3</option>
+              <option value="4">User 4</option>
+              <option value="5">User 5</option>
+            </select>
+            <button @fetch:click="https://jsonplaceholder.typicode.com/users/{selectedUserId}" @result="selectedUser"
+              @if="selectedUserId" class="btn-primary">Load User</button>
+          </div>
+
+          <div @if="selectedUser">
+            <div style="background: #f8fafc; padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+              <h4 @text="selectedUser.name"></h4>
+              <p>Email: <span @text="selectedUser.email"></span></p>
+              <p>Website: <span @text="selectedUser.website"></span></p>
+              <p>Company: <span @text="selectedUser.company.name"></span></p>
+            </div>
+
+            <button @fetch:click="https://jsonplaceholder.typicode.com/posts?userId={selectedUserId}"
+              @result="userPosts" class="btn-primary">Load User's Posts</button>
+          </div>
+
+          <div @if="userPosts && userPosts.length > 0">
+            <h4>Posts by <span @text="selectedUser.name"></span>:</h4>
+            <div @for="post in userPosts.slice(0, 3)" @key="post.id" class="blog-post">
+              <h3 @text="post.title"></h3>
+              <p @text="post.body"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no><select @model="selectedUserId">
+  <option value="">Choose user...</option>
+  <option value="1">User 1</option>
+  <option value="2">User 2</option>
+</select>
+<button @fetch:click="https://jsonplaceholder.typicode.com/users/{selectedUserId}" @result="selectedUser" @if="selectedUserId">Load User</button>
+
+<div @if="selectedUser">
+  <h4 @text="selectedUser.name"></h4>
+  <p>Email: <span @text="selectedUser.email"></span></p>
+  <p>Website: <span @text="selectedUser.website"></span></p>
+  <button @fetch:click="https://jsonplaceholder.typicode.com/posts?userId={selectedUserId}" @result="userPosts">Load User's Posts</button>
+</div></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ URL interpolation with <span class="highlight">{variable}</span> syntax allows dynamic API calls!</p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+      <!-- Step 7: Form Validation -->
+      <section class="tutorial-step" @show="currentStep == 7">
+        <div>
+          <span class="step-number">7</span>
+          <h2 class="step-title">Form Validation</h2>
+        </div>
+        <p class="step-description">
+          Let's add a contact form with validation. We'll use the <span class="highlight">@validate</span> directive to
+          ensure data quality.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - Contact Form</h4>
+
+          <form style="background: #f8fafc; padding: 1.5rem; border-radius: 8px;">
+            <div style="margin-bottom: 1rem;">
+              <label>Name (min 3 chars, only letters and spaces):</label>
+              <input @model="contactName" @validate="^[a-zA-ZÀ-ÿ\s]{3,50}$" placeholder="Your name"
+                style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <label>Email (required, must be valid):</label>
+              <input @model="contactEmail" @validate="email" placeholder="your@email.com" style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <label>Phone (required, format: +39 123 456 7890):</label>
+              <input @model="contactPhone" @validate="phone" placeholder="+39 123 456 7890" style="width: 100%;">
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+              <label>Message (min 10 chars, no special symbols):</label>
+              <textarea @model="contactMessage" @validate="^[a-zA-ZÀ-ÿ0-9\s\.,!?\-]{10,500}$"
+                placeholder="Your message..." style="width: 100%; height: 100px;"></textarea>
+            </div>
+
+            <button
+              @click="console.log('Form submitted!', {name: contactName, email: contactEmail, phone: contactPhone, message: contactMessage})"
+              @class="{
+                    'btn-primary': _validate.contactName && _validate.contactEmail && _validate.contactPhone && _validate.contactMessage,
+                    'btn-secondary': !(_validate.contactName && _validate.contactEmail && _validate.contactPhone && _validate.contactMessage)
+                  }">
+              Submit Contact Form
+            </button>
+          </form>
+
+          <div style="margin-top: 1rem; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+            <h4>Validation Status:</h4>
+            <p>Name valid: <span @text="_validate.contactName ? '✅' : '❌'"></span></p>
+            <p>Email valid: <span @text="_validate.contactEmail ? '✅' : '❌'"></span></p>
+            <p>Phone valid: <span @text="_validate.contactPhone ? '✅' : '❌'"></span></p>
+            <p>Message valid: <span @text="_validate.contactMessage ? '✅' : '❌'"></span></p>
+          </div>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no><form>
+  <div>
+    <label>Name (min 3 chars, only letters and spaces):</label>
+    <input @model="contactName" @validate="^[a-zA-ZÀ-ÿ\s]{3,50}$" placeholder="Your name">
+  </div>
+  
+  <div>
+    <label>Email (required, must be valid):</label>
+    <input @model="contactEmail" @validate="email" placeholder="your@email.com">
+  </div>
+  
+  <div>
+    <label>Phone (required, format: +39 123 456 7890):</label>
+    <input @model="contactPhone" @validate="phone" placeholder="+39 123 456 7890">
+  </div>
+  
+  <div>
+    <label>Message (min 10 chars, no special symbols):</label>
+    <textarea @model="contactMessage" @validate="^[a-zA-ZÀ-ÿ0-9\s\.,!?\-]{10,500}$" placeholder="Your message..."></textarea>
+  </div>
+  
+  <button @class="{
+    'btn-primary': _validate.contactName && _validate.contactEmail && _validate.contactPhone && _validate.contactMessage,
+    'btn-secondary': !(_validate.contactName && _validate.contactEmail && _validate.contactPhone && _validate.contactMessage)
+  }">Submit Contact Form</button>
+</form></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ <span class="highlight">@validate</span> provides real-time validation. Check <span
+            class="highlight">_validate</span> object for validation results!</p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+      <!-- Step 8: Search and Filter -->
+      <section class="tutorial-step" @show="currentStep == 8">
+        <div>
+          <span class="step-number">8</span>
+          <h2 class="step-title">Search & Filter Functionality</h2>
+        </div>
+        <p class="step-description">
+          Let's add search functionality to filter blog posts. We'll use JavaScript's array methods within Ayisha.js.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - Search Posts</h4>
+
+          <div style="margin-bottom: 1rem;">
+            <input @model="searchQuery"
+              @input="filteredPosts = apiPosts.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()) || p.body.toLowerCase().includes(searchQuery.toLowerCase()))"
+              placeholder="Search posts..." style="width: 100%;">
+          </div>
+
+          <div @if="searchQuery && filteredPosts">
+            <p>Found <strong @text="filteredPosts.length"></strong> posts matching "<span @text="searchQuery"></span>"
+            </p>
+
+            <div @for="post in filteredPosts.slice(0, 5)" @key="post.id" class="blog-post">
+              <h3 @text="post.title"></h3>
+              <p @text="post.body"></p>
+              <div class="blog-post-meta">Post ID: <span @text="post.id"></span></div>
+            </div>
+          </div>
+
+          <div @if="!apiPosts || apiPosts.length === 0">
+            <p style="text-align: center; color: #6b7280; padding: 2rem;">
+              First load some posts from Step 5 to use the search! 🔍
+            </p>
+          </div>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no><input @model="searchQuery" @input="filteredPosts = apiPosts.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()) || p.body.toLowerCase().includes(searchQuery.toLowerCase()))" placeholder="Search posts...">
+
+<div @if="searchQuery && filteredPosts">
+  <p>Found <strong @text="filteredPosts.length"></strong> posts matching "<span @text="searchQuery"></span>"</p>
+  
+  <div @for="post in filteredPosts.slice(0, 5)" @key="post.id">
+    <h3 @text="post.title"></h3>
+    <p @text="post.body"></p>
+    <div>Post ID: <span @text="post.id"></span></div>
+  </div>
+</div></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ <span class="highlight">@input</span> triggers on every keystroke. Complex filtering logic works seamlessly!
+        </p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+
+      <div @fetch="https://jsonplaceholder.typicode.com/posts" @result="newPosts" class="btn-primary"></div>
+
+
+      <!-- Step 9: Comments System -->
+      <section class="tutorial-step" @show="currentStep == 9">
+        <div>
+          <span class="step-number">9</span>
+          <h2 class="step-title">Comments System</h2>
+        </div>
+        <p class="step-description">
+          Let's build a comments system for our blog posts. We'll load comments from the API and allow users to add new
+          ones.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - Post Comments</h4>
+
+          <div @if="newPosts && newPosts.length > 0">
+            <select @model="selectedPostId" style="margin-bottom: 1rem;">
+              <option value="">Select a post to view comments...</option>
+              <option @for="post in newPosts.slice(0, 5)" @key="post.id" value="{post.id}"
+                @text="post.title.substring(0, 50) + '...'"></option>
+            </select>
+            <div @fetch="https://jsonplaceholder.typicode.com/comments?postId={selectedPostId}" @result="postComments"
+              @watch="selectedPostId"></div>
+          </div>
+
+          <div @if="postComments && postComments.length > 0">
+            <h4>Comments for this post: </h4>
+            <div @watch="postComments">
+              <div @for="comment in postComments.slice(-3)" @key="comment.id"
+                style="background: #f8fafc; padding: 1rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid #4f46e5;">
+                <h5 @text="comment.name"></h5>
+                <p style="font-size: 0.9rem; color: #6b7280;">by <span @text="comment.email"></span></p>
+                <p @text="comment.body"></p>
+              </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+              <h4>Add a Comment:</h4>
+              <input @model="newCommentName" placeholder="Your name" style="width: 100%; margin-bottom: 0.5rem;">
+              <input @model="newCommentEmail" placeholder="Your email" style="width: 100%; margin-bottom: 0.5rem;">
+              <textarea @model="newCommentBody" placeholder="Your comment..."
+                style="width: 100%; height: 80px; margin-bottom: 0.5rem;"></textarea>
+              <button
+                @click="postComments.push({postId:selectedPostId, id: Date.now(), name: newCommentName, email: newCommentEmail, body: newCommentBody}); newCommentName=''; newCommentEmail=''; newCommentBody=''"
+                class="btn-primary">Add Comment</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no>
+            
+          <select @model="selectedPostId" style="margin-bottom: 1rem;">
+            <option value="">Select a post to view comments...</option>
+            <option @for="post in newPosts.slice(0, 5)" @key="post.id" value="{post.id}" @text="post.title.substring(0, 50) + '...'" ></option>
+          </select>
+
+          <div @fetch="https://jsonplaceholder.typicode.com/comments?postId={selectedPostId}" @result="postComments" @watch="selectedPostId"></div>
+
+ <div @if="postComments && postComments.length > 0">
+          <h4>Comments for this post: </h4>
+          <div @watch="postComments">
+            <div @for="comment in postComments.slice(-3)" @key="comment.id" style="background: #f8fafc; padding: 1rem; margin: 0.5rem 0; border-radius: 8px; border-left: 4px solid #4f46e5;">
+              <h5 @text="comment.name"></h5>
+              <p style="font-size: 0.9rem; color: #6b7280;">by <span @text="comment.email"></span></p>
+              <p @text="comment.body"></p>
+            </div>
+          </div>
+          
+          <div style="margin-top: 1.5rem; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+            <h4>Add a Comment:</h4>
+            <input @model="newCommentName" placeholder="Your name" style="width: 100%; margin-bottom: 0.5rem;">
+            <input @model="newCommentEmail" placeholder="Your email" style="width: 100%; margin-bottom: 0.5rem;">
+            <textarea @model="newCommentBody" placeholder="Your comment..." style="width: 100%; height: 80px; margin-bottom: 0.5rem;"></textarea>
+            <button @click="postComments.push({postId:selectedPostId, id: Date.now(), name: newCommentName, email: newCommentEmail, body: newCommentBody}); newCommentName=''; newCommentEmail=''; newCommentBody=''" class="btn-primary">Add Comment</button>
+          </div>
+        </div></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ Nested API calls and dynamic list manipulation create rich, interactive experiences!</p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+      <!-- Step 10: Advanced Features -->
+      <section class="tutorial-step" @show="currentStep == 10">
+        <div>
+          <span class="step-number">10</span>
+          <h2 class="step-title">Advanced Features & State Management</h2>
+        </div>
+        <p class="step-description">
+          Let's wrap up with advanced features: state watching, animations, and a complete blog dashboard.
+        </p>
+
+        <div class="live-demo">
+          <h4>🎯 Live Demo - Blog Dashboard</h4>
+
+          <div
+            @watch="posts.length => totalPosts = posts.length; avgLikes = posts.reduce((sum, p) => sum + p.likes, 0) / posts.length || 0">
+          </div>
+
+          <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div style="background: #f0f9ff; padding: 1.5rem; border-radius: 8px; text-align: center;">
+              <h3 @text="totalPosts"></h3>
+              <p>Total Posts</p>
+            </div>
+            <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 8px; text-align: center;">
+              <h3 @text="Math.round(avgLikes * 10) / 10"></h3>
+              <p>Average Likes</p>
+            </div>
+            <div style="background: #fef3c7; padding: 1.5rem; border-radius: 8px; text-align: center;">
+              <h3 @text="visitors"></h3>
+              <p>Total Visitors</p>
+            </div>
+          </div>
+
+          <div @if="posts.length > 0">
+            <h4>Your Blog Posts:</h4>
+            <div @for="post in posts" @key="post.id" class="blog-post" @animate="fadeIn">
+              <h3 @text="post.title"></h3>
+              <p @text="post.content"></p>
+              <div class="blog-post-meta">
+                Likes: <span @text="post.likes"></span> |
+                <span @text="post.likes > 5 ? 'Popular! 🔥' : 'Getting started 📈'"></span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 2rem; padding: 1.5rem; background: #1f2937; color: #e5e7eb; border-radius: 8px;">
+            <h4>Debug State:</h4>
+            <div @state style="max-height: 200px; overflow-y: auto;"></div>
+          </div>
+        </div>
+
+        <div class="tutorial-code-example">
+          <h4>📋 Code Example</h4>
+          <div class="tutorial-entry-code">
+            <pre><code><no><div @watch="posts.length => totalPosts = posts.length; avgLikes = posts.reduce((sum, p) => sum + p.likes, 0) / posts.length || 0"></div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+  <div>
+    <h3 @text="totalPosts"></h3>
+    <p>Total Posts</p>
+  </div>
+  <div>
+    <h3 @text="Math.round(avgLikes * 10) / 10"></h3>
+    <p>Average Likes</p>
+  </div>
+  <div>
+    <h3 @text="visitors"></h3>
+    <p>Total Visitors</p>
+  </div>
+</div>
+
+<div @if="posts.length > 0">
+  <div @for="post in posts" @key="post.id" @animate="fadeIn">
+    <h3 @text="post.title"></h3>
+    <p @text="post.content"></p>
+    <div>Likes: <span @text="post.likes"></span> | <span @text="post.likes > 5 ? 'Popular! 🔥' : 'Getting started 📈'"></span></div>
+  </div>
+</div>
+
+<div @state></div></no></code></pre>
+          </div>
+        </div>
+
+        <p
+          style="margin-top: 2rem; padding: 1rem; background: #f0f9ff; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          ✨ <span class="highlight">@watch</span> monitors state changes, <span class="highlight">@animate</span> adds
+          smooth transitions, and <span class="highlight">@state</span> helps with debugging!</p>
+
+        <!-- Step Progress -->
+        <component @src="step-progress.html"></component>
+      </section>
+
+      <!-- Tutorial Navigation -->
+      <section class="tutorial-navigation">
+        <button @click="currentStep = Math.max(1, currentStep - 1)" @if="currentStep > 1" class="btn-secondary">⬅️
+          Previous Step</button>
+        <button @click="currentStep = Math.min(10, currentStep + 1)" @if="currentStep < 10" class="btn-primary">Next
+          Step ➡️</button>
+        <button @click="currentStep = 1" @if="currentStep === 10" class="btn-primary">🔄 Start Over</button>
+      </section>
+
+      <!-- Completion Message -->
+
+      <section class="tutorial-step" @if="currentStep === 10"
+        style="text-align: center; background: #fffbe6; color: #1f2937; padding: 4rem;">
+        <h2 style="margin-bottom: 2rem; color: #b45309; text-shadow: 0 2px 8px #fffbe6;">🎉 Congratulations!</h2>
+        <p style="font-size: 1.2rem; margin: 2rem 0; line-height: 1.6; color: #92400e;">You've completed the Ayisha.js blog tutorial!<br> You now know how to:</p>
+        <ul style="list-style: none; padding: 0; margin: 3rem 0;">
+          <li style="margin: 1rem 0; font-size: 1.1rem; color: #92400e;"><span style="color: #22c55e; font-size: 1.2em; margin-right: 0.5em;">✅</span> Create reactive user interfaces</li>
+          <li style="margin: 1rem 0; font-size: 1.1rem; color: #92400e;"><span style="color: #22c55e; font-size: 1.2em; margin-right: 0.5em;">✅</span> Handle user interactions and events</li>
+          <li style="margin: 1rem 0; font-size: 1.1rem; color: #92400e;"><span style="color: #22c55e; font-size: 1.2em; margin-right: 0.5em;">✅</span> Work with APIs and external data</li>
+          <li style="margin: 1rem 0; font-size: 1.1rem; color: #92400e;"><span style="color: #22c55e; font-size: 1.2em; margin-right: 0.5em;">✅</span> Implement form validation</li>
+          <li style="margin: 1rem 0; font-size: 1.1rem; color: #92400e;"><span style="color: #22c55e; font-size: 1.2em; margin-right: 0.5em;">✅</span> Build dynamic search and filtering</li>
+          <li style="margin: 1rem 0; font-size: 1.1rem; color: #92400e;"><span style="color: #22c55e; font-size: 1.2em; margin-right: 0.5em;">✅</span> Manage complex application state</li>
+          <li style="margin: 1rem 0; font-size: 1.1rem; color: #92400e;"><span style="color: #22c55e; font-size: 1.2em; margin-right: 0.5em;">✅</span> Create engaging user experiences</li>
+        </ul>
+        <div style="margin-top: 3rem;">
+          <a href="examples.html" class="cta" style="margin-right: 2rem; color: #b45309; text-decoration: underline; font-weight: bold;">More Examples</a>
+          <a href="wiki.html" class="cta" style="color: #b45309; text-decoration: underline; font-weight: bold;">Full Documentation</a>
+        </div>
+      </section>
+
+    </main>
+
+    <init>
+      // Tutorial state
+      state.currentStep = 1;
+
+      // Blog basic info
+      state.blogTitle = 'My Amazing Blog';
+      state.author = 'Your Name';
+      state.visitors = 42;
+
+      // Posts management
+      state.posts = [];
+      state.newPostTitle = '';
+
+      // API data
+      state.apiPosts = [];
+      state.selectedUserId = '';
+      state.selectedUser = null;
+      state.userPosts = [];
+
+      // Comments
+      state.selectedPostId = '';
+      state.postComments = [];
+      state.newCommentName = '';
+      state.newCommentEmail = '';
+      state.newCommentBody = '';
+
+      // Contact form
+      state.contactName = '';
+      state.contactEmail = '';
+      state.contactPhone = '';
+      state.contactMessage = '';
+
+      // Search
+      state.searchQuery = '';
+      state.filteredPosts = [];
+
+      // Dashboard stats
+      state.totalPosts = 0;
+      state.avgLikes = 0;
+
+      _currentPage = 'tutorial';
+    </init>
+
+    <script src="https://cdn.jsdelivr.net/gh/BenJrSky/ayisha.js@main/dist/ayisha-1.0.0-min.js"></script>
+    <component @src="footer.html"></component>
+</body>
+
+</html>

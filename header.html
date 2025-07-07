@@ -1,0 +1,43 @@
+<header class="ayisha-header">
+  <div class="ayisha-header-inner">
+    <a href="index.html" class="ayisha-logo">
+      <img src="ayisha-logo-black.png" alt="Ayisha.js Logo" class="ayisha-logo-img" />
+      <span class="ayisha-logo-title">Ayisha.js</span>
+      <a href="versions.html" class="ayisha-version-badge" style="margin-left:10px; background:#222; color:#fff; border-radius:4px; padding:2px 8px; font-size:12px; font-family:monospace; vertical-align:middle; opacity:0.85; letter-spacing:0.5px; text-decoration:none; cursor:pointer;">v{{ state._version }}</a>
+    </a>
+
+    <button class="mobile-nav-toggle" @set="mobileNavOpen = false"
+            @click="mobileNavOpen = !mobileNavOpen"
+            @class="{active: mobileNavOpen}">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    <nav class="ayisha-nav" @class="{open: mobileNavOpen}">
+      <div class="nav-overlay" @click="mobileNavOpen = false"></div>
+      <div class="nav-items">
+        <div class="mobile-nav-logo">
+          <img src="ayisha-logo-black.png" alt="Ayisha.js Logo" class="mobile-logo-img" />
+          <span class="mobile-logo-title">Ayisha.js</span>
+          <a href="versions.html" class="ayisha-version-badge" style="margin-left:8px; background:#222; color:#fff; border-radius:4px; padding:2px 8px; font-size:12px; font-family:monospace; vertical-align:middle; opacity:0.85; letter-spacing:0.5px; text-decoration:none; cursor:pointer;">v{{ state._version }}</a>
+        </div>
+        <a href="index.html" 
+           @class="{active: location.pathname === '/' || location.pathname.includes('index')}" 
+           @click="mobileNavOpen = false">Home</a>
+        <a href="wiki.html" 
+           @class="{active: location.pathname.includes('wiki')}" 
+           @click="mobileNavOpen = false">Wiki</a>
+        <a href="tutorial.html" 
+           @class="{active: location.pathname.includes('tutorial')}" 
+           @click="mobileNavOpen = false">Tutorial</a>
+        <a href="faq.html" 
+           @class="{active: location.pathname.includes('faq')}" 
+           @click="mobileNavOpen = false">FAQ</a>
+        <a href="examples.html" 
+           @class="{active: location.pathname.includes('examples')}" 
+           @click="mobileNavOpen = false">Examples</a>
+      </div>
+    </nav>
+  </div>
+</header>
