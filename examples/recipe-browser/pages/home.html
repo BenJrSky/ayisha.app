@@ -1,0 +1,85 @@
+  <div class="container">
+                <!-- Sezione di benvenuto -->
+                <div class="search-section">
+                    <h2 style="margin-bottom: 1rem; color: var(--text-dark);">Benvenuto nel mondo delle ricette!</h2>
+                    <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.1rem;">
+                        Esplora migliaia di ricette da tutto il mondo. Cerca per nome, sfoglia per categoria o lasciati sorprendere da una ricetta casuale.
+                    </p>
+                    
+                    <!-- Ricerca rapida -->
+                    <div class="search-container">
+                        <input type="text" @model="quickSearch" class="search-input" placeholder="Cerca una ricetta...">
+                        <button @click="searchQuery = quickSearch; currentPage = 'search'; quickSearch = ''" class="search-btn">⊙ Cerca</button>
+                    </div>
+                </div>
+
+                <!-- Sezioni principali -->
+                <div class="categories-grid">
+                    <div class="category-card" @click="currentPage = 'categories'">
+                        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=200&fit=crop" alt="Categorie" class="category-image">
+                        <div class="category-info">
+                            <h3 class="category-name">⊞ Esplora Categorie</h3>
+                            <p class="category-description">
+                                Sfoglia le ricette per categoria: antipasti, primi piatti, dolci e molto altro. 
+                                Trova facilmente quello che stai cercando.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="category-card" @click="currentPage = 'search'">
+                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop" alt="Ricerca" class="category-image">
+                        <div class="category-info">
+                            <h3 class="category-name">⊙ Ricerca Avanzata</h3>
+                            <p class="category-description">
+                                Cerca ricette per nome, ingrediente principale o area geografica. 
+                                Filtri avanzati per trovare esattamente quello che desideri.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="category-card" @click="currentPage = 'random'">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop" alt="Casuale" class="category-image">
+                        <div class="category-info">
+                            <h3 class="category-name">⊛ Ricetta Casuale</h3>
+                            <p class="category-description">
+                                Non sai cosa cucinare? Lasciati ispirare da una ricetta scelta casualmente. 
+                                Perfetto per scoprire nuovi sapori!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ricette popolari -->
+                <div style="margin-top: 4rem;">
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-dark);">◐ Ricette Popolari</h2>
+                    
+                    <!-- Carica 6 ricette casuali come popolari -->
+                    <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomRecipe1"></div>
+                    <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomRecipe2"></div>
+                    <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomRecipe3"></div>
+                    <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomRecipe4"></div>
+                    <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomRecipe5"></div>
+                    <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomRecipe6"></div>
+                    
+                    <!-- Combina i risultati -->
+                    <div @source="[randomRecipe1?.meals?.[0], randomRecipe2?.meals?.[0], randomRecipe3?.meals?.[0], randomRecipe4?.meals?.[0], randomRecipe5?.meals?.[0], randomRecipe6?.meals?.[0]]" 
+                         @filter="item && item.idMeal" 
+                         @result="popularRecipes"></div>
+                    
+                    <div class="recipes-grid">
+                        <div @if="!popularRecipes || popularRecipes.length === 0" class="loading">
+                            Caricamento ricette popolari...
+                        </div>
+                        
+                        <div @for="recipe in popularRecipes" @key="recipe.idMeal" class="recipe-card fade-in" 
+                             @click="selectedMealId = recipe.idMeal; currentPage = 'recipe-detail'">
+                            <img @src="recipe.strMealThumb" @alt="recipe.strMeal" class="recipe-image">
+                            <div class="recipe-info">
+                                <h3 class="recipe-name" @text="recipe.strMeal"></h3>
+                                <span class="recipe-category" @text="recipe.strCategory"></span>
+                                <p class="recipe-area">◎ <span @text="recipe.strArea"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>

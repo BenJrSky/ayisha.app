@@ -5,160 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recipe Browser - Sfoglia le Ricette</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="../../ayisha-1.0.0.js"></script>
 </head>
 <body>
+    <!-- Inizializzazione dello stato globale -->
+    <init>
+        // Stato globale dell'applicazione
+        state.currentPage = 'home';
+        state.quickSearch = '';
+        state.selectedCategory = '';
+        state.selectedMealId = '';
+        state.searchQuery = '';
+        state.searchType = 'name';
+        state.searchIngredient = '';
+        state.searchArea = '';
+        state.searchLetter = 'A';
+        state.popularRecipes = [];
+        state.categories = [];
+        state.categoryMeals = [];
+        state.searchResults = [];
+        state.currentRecipe = null;
+        state.randomMeal = null;
+        state.loading = false;
+        state.error = '';
+        
+        // API base URL
+        state.API_BASE = 'https://www.themealdb.com/api/json/v1/1/';
+    </init>
+
     <header class="header">
         <h1>◉ Recipe Browser</h1>
         <p>Scopri deliziose ricette da tutto il mondo</p>
     </header>
+    <!-- NAV BAR -->
+    <component @src="./components/nav.html"></component>
+    <!-- PAGINA HOME -->
+    <component @src="./pages/home.html" @page="home"></component>
+    <!-- PAGINA CATEGORIE -->
+    <component @src="./examples/recipe-browser/pages/categories.html" @page="categories"></component>
+    <!-- PAGINA RICETTE PER CATEGORIA -->
+    <component @src="./examples/recipe-browser/pages/category-meals.html" @page="category-meals"></component>
+    <!-- PAGINA CERCA -->
+    <component @src="./examples/recipe-browser/pages/search.html" @page="search"></component>
+    <!-- PAGINA RICETTA CASUALE -->
+    <component @src="./examples/recipe-browser/pages/random.html" @page="random"></component>
+     <!-- PAGINA DETTAGLIO RICETTA -->
+    <component @src="./examples/recipe-browser/pages/recipe-detail.html" @page="recipe-detail"></component>
 
-    <nav class="nav">
-        <div class="nav-container">
-            <a href="index.html" class="nav-link active">⌂ Home</a>
-            <a href="categories.html" class="nav-link">⊞ Categorie</a>
-            <a href="search.html" class="nav-link">⊙ Cerca</a>
-            <a href="random.html" class="nav-link">⊛ Casuale</a>
-        </div>
-    </nav>
 
-    <div class="container">
-        <!-- Sezione di benvenuto -->
-        <div class="search-section">
-            <h2 style="margin-bottom: 1rem; color: var(--text-dark);">Benvenuto nel mondo delle ricette!</h2>
-            <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.1rem;">
-                Esplora migliaia di ricette da tutto il mondo. Cerca per nome, sfoglia per categoria o lasciati sorprendere da una ricetta casuale.
-            </p>
-            
-            <!-- Ricerca rapida -->
-            <div class="search-container">
-                <input type="text" id="quickSearch" class="search-input" placeholder="Cerca una ricetta...">
-                <button onclick="searchQuick()" class="search-btn">⊙ Cerca</button>
-            </div>
-        </div>
+    <div @state></div>
 
-        <!-- Sezioni principali -->
-        <div class="categories-grid">
-            <div class="category-card" onclick="window.location.href='categories.html'">
-                <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=200&fit=crop" alt="Categorie" class="category-image">
-                <div class="category-info">
-                    <h3 class="category-name">⊞ Esplora Categorie</h3>
-                    <p class="category-description">
-                        Sfoglia le ricette per categoria: antipasti, primi piatti, dolci e molto altro. 
-                        Trova facilmente quello che stai cercando.
-                    </p>
-                </div>
-            </div>
-
-            <div class="category-card" onclick="window.location.href='search.html'">
-                <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop" alt="Ricerca" class="category-image">
-                <div class="category-info">
-                    <h3 class="category-name">⊙ Ricerca Avanzata</h3>
-                    <p class="category-description">
-                        Cerca ricette per nome, ingrediente principale o area geografica. 
-                        Filtri avanzati per trovare esattamente quello che desideri.
-                    </p>
-                </div>
-            </div>
-
-            <div class="category-card" onclick="getRandomMeal()">
-                <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop" alt="Casuale" class="category-image">
-                <div class="category-info">
-                    <h3 class="category-name">⊛ Ricetta Casuale</h3>
-                    <p class="category-description">
-                        Non sai cosa cucinare? Lasciati ispirare da una ricetta scelta casualmente. 
-                        Perfetto per scoprire nuovi sapori!
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ricette popolari -->
-        <div style="margin-top: 4rem;">
-            <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-dark);">◐ Ricette Popolari</h2>
-            <div id="popularRecipes" class="recipes-grid">
-                <div class="loading">Caricamento ricette popolari...</div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Importa la configurazione API
-        const API_BASE = 'https://www.themealdb.com/api/json/v1/1/';
-
-        // Funzione per la ricerca rapida
-        function searchQuick() {
-            const query = document.getElementById('quickSearch').value.trim();
-            if (query) {
-                localStorage.setItem('searchQuery', query);
-                window.location.href = 'search.html';
-            }
-        }
-
-        // Gestione invio con Enter
-        document.getElementById('quickSearch').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchQuick();
-            }
-        });
-
-        // Funzione per ottenere una ricetta casuale
-        async function getRandomMeal() {
-            try {
-                const response = await fetch(`${API_BASE}random.php`);
-                const data = await response.json();
-                
-                if (data.meals && data.meals[0]) {
-                    const mealId = data.meals[0].idMeal;
-                    window.location.href = `recipe-detail.html?id=${mealId}`;
-                }
-            } catch (error) {
-                console.error('Errore nel caricamento ricetta casuale:', error);
-                alert('Errore nel caricamento della ricetta casuale. Riprova.');
-            }
-        }
-
-        // Carica ricette popolari all'avvio
-        async function loadPopularRecipes() {
-            const container = document.getElementById('popularRecipes');
-            
-            try {
-                // Carica alcune ricette casuali come "popolari"
-                const promises = Array(6).fill().map(() => fetch(`${API_BASE}random.php`));
-                const responses = await Promise.all(promises);
-                const data = await Promise.all(responses.map(r => r.json()));
-                
-                const recipes = data.map(d => d.meals[0]).filter(Boolean);
-                
-                container.innerHTML = recipes.map(recipe => `
-                    <div class="recipe-card" onclick="window.location.href='recipe-detail.html?id=${recipe.idMeal}'">
-                        <img src="${recipe.strMealThumb}" alt="${recipe.strMeal}" class="recipe-image">
-                        <div class="recipe-info">
-                            <h3 class="recipe-name">${recipe.strMeal}</h3>
-                            <span class="recipe-category">${recipe.strCategory}</span>
-                            <p class="recipe-area">◎ ${recipe.strArea}</p>
-                        </div>
-                    </div>
-                `).join('');
-                
-                // Aggiungi animazione fade-in
-                container.querySelectorAll('.recipe-card').forEach((card, index) => {
-                    card.style.animationDelay = `${index * 0.1}s`;
-                    card.classList.add('fade-in');
-                });
-                
-            } catch (error) {
-                console.error('Errore nel caricamento ricette popolari:', error);
-                container.innerHTML = `
-                    <div class="error">
-                        ◒ Errore nel caricamento delle ricette popolari. 
-                        <br>Controlla la connessione internet e ricarica la pagina.
-                    </div>
-                `;
-            }
-        }
-
-        // Carica le ricette quando la pagina è pronta
-        document.addEventListener('DOMContentLoaded', loadPopularRecipes);
-    </script>
 </body>
 </html>

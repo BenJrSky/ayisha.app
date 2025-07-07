@@ -1,0 +1,33 @@
+<div class="container">
+                <div class="search-section text-center">
+                    <h2 style="margin-bottom: 2rem; color: var(--text-dark);">⊛ Ricetta Casuale</h2>
+                    <p style="color: var(--text-light); margin-bottom: 2rem;">
+                        Lasciati ispirare da una ricetta scelta casualmente!
+                    </p>
+                    <button @click="randomMeal = null" class="search-btn" style="margin-bottom: 2rem;">
+                        🎲 Nuova ricetta casuale
+                    </button>
+                </div>
+
+                <!-- Carica ricetta casuale -->
+                <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomMealData" @watch="randomMeal === null ? Date.now() : null"></div>
+                <div @source="randomMealData?.meals?.[0]" @result="randomMeal"></div>
+
+                <div @if="randomMeal" class="recipe-detail-container">
+                    <div class="recipe-header">
+                        <img @src="randomMeal.strMealThumb" @alt="randomMeal.strMeal" class="recipe-detail-image">
+                        <div class="recipe-header-info">
+                            <h1 @text="randomMeal.strMeal"></h1>
+                            <div class="recipe-meta">
+                                <span class="recipe-category" @text="randomMeal.strCategory"></span>
+                                <span class="recipe-area">◎ <span @text="randomMeal.strArea"></span></span>
+                            </div>
+                            <button @click="selectedMealId = randomMeal.idMeal; currentPage = 'recipe-detail'" class="search-btn">
+                                Vedi ricetta completa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div @if="!randomMeal" class="loading">Caricamento ricetta casuale...</div>
+            </div>
