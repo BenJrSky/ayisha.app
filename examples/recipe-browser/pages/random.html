@@ -4,18 +4,16 @@
                     <p style="color: var(--text-light); margin-bottom: 2rem;">
                         Get inspired by a randomly selected recipe!
                     </p>
-                    <button @click="randomMeal = null" class="search-btn" style="margin-bottom: 2rem;">
+                    <button @click="loading = !loading" class="search-btn" style="margin-bottom: 2rem;">
                         🎲 New random recipe
                     </button>
                 </div>
 
-                <!-- Carica ricetta casuale -->
-                <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomMealData" @watch="randomMeal === null ? Date.now() : null"></div>
-                <div @source="randomMealData?.meals?.[0]" @result="randomMeal"></div>
+                <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomMealData" @watch="loading" @then="randomMeal=randomMealData?.meals?.[0]" ></div>
 
                 <div @if="randomMeal" class="recipe-detail-container">
                     <div class="recipe-header">
-                        <img @src="randomMeal.strMealThumb" @alt="randomMeal.strMeal" class="recipe-detail-image">
+                        <img src="{{randomMeal.strMealThumb}}" alt="randomMeal.strMeal" class="recipe-detail-image">
                         <div class="recipe-header-info">
                             <h1 @text="randomMeal.strMeal"></h1>
                             <div class="recipe-meta">

@@ -8,6 +8,9 @@
     font-size: 1rem;
     box-shadow: 0 -2px 8px rgba(0,0,0,0.03);
 }
+.pointer{
+    cursor: pointer;
+}
 .footer-content {
     display: flex;
     flex-wrap: wrap;

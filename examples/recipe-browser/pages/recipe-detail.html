@@ -1,7 +1,6 @@
  <div class="container">
                 <!-- Carica dettagli ricetta -->
-                <div @fetch="https://www.themealdb.com/api/json/v1/1/lookup.php?i={selectedMealId}" @result="recipeData" @watch="selectedMealId"></div>
-                <div @source="recipeData?.meals?.[0]" @result="currentRecipe"></div>
+                <div @fetch="https://www.themealdb.com/api/json/v1/1/lookup.php?i={selectedMealId}" @result="recipeData" @watch="selectedMealId" @then="currentRecipe=true"></div>
 
                 <div @if="recipeData?.meals?.[0]">
                 <button @link="search" class="search-btn" style="margin-bottom: 2rem;">
@@ -14,7 +13,7 @@
                             <div class="recipe-header-info">
                                 <h1 @text="recipeData?.meals?.[0].strMeal"></h1>
                                 <div class="recipe-meta">
-                                    <span class="recipe-category" @text="recipeData?.meals?.[0].strCategory"></span>
+                                    <span class="recipe-category pointer" @text="recipeData?.meals?.[0].strCategory" @click="selectedCategory = recipeData?.meals?.[0].strCategory" @link="category-meals"></span>
                                     <span class="recipe-area">◎ <span @text="recipeData?.meals?.[0].strArea"></span></span>
                                 </div>
                                 <div @if="recipeData?.meals?.[0].strTags" class="recipe-tags">
@@ -27,7 +26,6 @@
                         <div class="recipe-section">
                             <h3>📋 Ingredients</h3>
                             <ul class="ingredients-list">
-                                    <!-- Crea lista dinamica degli ingredienti -->
                                     <li @if="recipeData?.meals?.[0].strIngredient1 && recipeData?.meals?.[0].strIngredient1.trim()">
                                         <span @text="recipeData?.meals?.[0].strMeasure1"></span> <strong @text="recipeData?.meals?.[0].strIngredient1"></strong>
                                     </li>
@@ -98,14 +96,14 @@
 
                             <div @if="recipeData?.meals?.[0].strYoutube" class="recipe-section">
                                 <h3>📺 Video Tutorial</h3>
-                                <a @href="recipeData?.meals?.[0].strYoutube" target="_blank" class="youtube-link">
+                                <a href="{{recipeData?.meals?.[0].strYoutube}}" target="_blank" class="youtube-link">
                                     Watch on YouTube
                                 </a>
                             </div>
 
                             <div @if="recipeData?.meals?.[0].strSource" class="recipe-section">
                                 <h3>🔗 Source</h3>
-                                <a @href="recipeData?.meals?.[0].strSource" target="_blank" class="source-link">
+                                <a href="{{recipeData?.meals?.[0].strSource}}" target="_blank" class="source-link">
                                     Go to original source
                                 </a>
                             </div>
