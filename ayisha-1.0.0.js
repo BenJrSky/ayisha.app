@@ -2980,8 +2980,23 @@
         wrapper.style.marginTop = '1em';
         wrapper.style.overflow = 'auto';
 
+        let stateValue = this.state;
+        let titleText = 'CURRENT STATE';
+        // Check if @state has an expression (e.g. @state="foo")
+        const stateExpr = vNode.directives['@state'];
+        if (typeof stateExpr === 'string' && stateExpr.trim()) {
+          // Evaluate the expression in the current context
+          try {
+            stateValue = this.evaluator.evalExpr(stateExpr, ctx);
+            titleText = `STATE: ${stateExpr}`;
+          } catch (e) {
+            stateValue = { error: 'Invalid expression', details: e.message };
+            titleText = `STATE: ${stateExpr}`;
+          }
+        }
+
         const title = document.createElement('h3');
-        title.textContent = 'CURRENT STATE';
+        title.textContent = titleText;
         title.style.margin = '0.5em 0 2em';
         title.style.fontSize = '1.1em';
         title.style.fontWeight = 'bold';
@@ -2992,7 +3007,7 @@
         pre.style.margin = '0';
         pre.style.whiteSpace = 'pre-wrap';
         pre.style.fontFamily = 'monospace';
-        pre.textContent = JSON.stringify(this.state, null, 2);
+        pre.textContent = JSON.stringify(stateValue, null, 2);
         wrapper.appendChild(pre);
 
         el.appendChild(wrapper);
