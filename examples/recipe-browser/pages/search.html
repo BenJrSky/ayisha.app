@@ -1,22 +1,13 @@
 <div class="container">
     <div class="search-section">
-        <h2 style="margin-bottom: 2rem; color: var(--text-dark);">Trova la tua ricetta ideale</h2>
+        <h2>Trova la tua ricetta ideale</h2>
 
         <!-- Schede di ricerca -->
-        <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center;">
-            <button @class="{'search-tab': true, 'active': searchType === 'name'}" @click="searchType = 'name'">
-                ◐ Per Nome
-            </button>
-            <button @class="{'search-tab': true, 'active': searchType === 'ingredient'}"
-                @click="searchType = 'ingredient'">
-                ◎ Per Ingrediente
-            </button>
-            <button @class="{'search-tab': true, 'active': searchType === 'area'}" @click="searchType = 'area'">
-                ◒ Per Area
-            </button>
-            <button @class="{'search-tab': true, 'active': searchType === 'letter'}" @click="searchType = 'letter'">
-                ◉ Per Lettera
-            </button>
+        <div class="search-tabs">
+            <button @class="{'search-tab': true, 'active': searchType === 'name'}" @click="searchType = 'name'" data-type="name">◐ Per Nome</button>
+            <button @class="{'search-tab': true, 'active': searchType === 'ingredient'}" @click="searchType = 'ingredient'" data-type="ingredient">◎ Per Ingrediente</button>
+            <button @class="{'search-tab': true, 'active': searchType === 'area'}" @click="searchType = 'area'" data-type="area">◒ Per Area</button>
+            <button @class="{'search-tab': true, 'active': searchType === 'letter'}" @click="searchType = 'letter'" data-type="letter">◉ Per Lettera</button>
         </div>
 
         <init>
