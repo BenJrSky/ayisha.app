@@ -9,7 +9,7 @@
                     <!-- Ricerca rapida -->
                     <div class="search-container">
                         <input type="text" @model="quickSearch" class="search-input" placeholder="Cerca una ricetta...">
-                        <button @click="searchQuery = quickSearch; currentPage = 'search'; quickSearch = ''" class="search-btn">⊙ Cerca</button>
+                        <button @click="searchQuery = quickSearch; currentPage = 'search'; quickSearch = ''" @link="search" class="search-btn">⊙ Cerca</button>
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                         
                         <div @for="recipe in popularRecipes" @key="recipe.idMeal" class="recipe-card fade-in" 
                              @click="selectedMealId = recipe.idMeal; currentPage = 'recipe-detail'">
-                            <img @src="recipe.strMealThumb" @alt="recipe.strMeal" class="recipe-image">
+                            <img src="{{recipe.strMealThumb}}" alt="recipe.strMeal" class="recipe-image">
                             <div class="recipe-info">
                                 <h3 class="recipe-name" @text="recipe.strMeal"></h3>
                                 <span class="recipe-category" @text="recipe.strCategory"></span>

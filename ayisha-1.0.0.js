@@ -2436,6 +2436,8 @@
       if (vNode && vNode.directives) {
         for (const dir of Object.keys(vNode.directives)) {
           if (dir === '@src' && vNode.tag === 'component') continue;
+          // Allow @attr as a valid directive
+          if (dir === '@attr') continue;
           if (!this.helpSystem.isValidDirective(dir)) {
             unknownDirective = dir;
             break;
@@ -2967,6 +2969,7 @@
         delete vNode.directives['@set'];
       }
 
+
       // @state
       if (vNode.directives.hasOwnProperty('@state')) {
         const wrapper = document.createElement('div');
@@ -2992,6 +2995,40 @@
         pre.textContent = JSON.stringify(this.state, null, 2);
         wrapper.appendChild(pre);
 
+        el.appendChild(wrapper);
+      }
+
+      // @attr
+      if (vNode.directives.hasOwnProperty('@attr')) {
+        const wrapper = document.createElement('div');
+        wrapper.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+        wrapper.style.color = '#fff';
+        wrapper.style.padding = '1em';
+        wrapper.style.borderRadius = '4px';
+        wrapper.style.marginTop = '1em';
+        wrapper.style.overflow = 'auto';
+
+        const title = document.createElement('h3');
+        title.textContent = 'STATE ATTRIBUTES';
+        title.style.margin = '0.5em 0 2em';
+        title.style.fontSize = '1.1em';
+        title.style.fontWeight = 'bold';
+        title.style.color = '#fff';
+        wrapper.appendChild(title);
+
+        const ul = document.createElement('ul');
+        ul.style.margin = '0';
+        ul.style.padding = '0 0 0 1.2em';
+        ul.style.fontFamily = 'monospace';
+        ul.style.fontSize = '1em';
+
+        Object.keys(this.state).forEach(key => {
+          const li = document.createElement('li');
+          li.textContent = key;
+          ul.appendChild(li);
+        });
+
+        wrapper.appendChild(ul);
         el.appendChild(wrapper);
       }
 
