@@ -2438,6 +2438,8 @@
           if (dir === '@src' && vNode.tag === 'component') continue;
           // Allow @attr as a valid directive
           if (dir === '@attr') continue;
+          // Allow @then as a valid directive
+          if (dir === '@then') continue;
           if (!this.helpSystem.isValidDirective(dir)) {
             unknownDirective = dir;
             break;
@@ -2523,6 +2525,7 @@
         el.setAttribute(k, this.evaluator.evalAttrValue(v, ctx));
       });
 
+      // 1. Handle all directives except @then
       this._handleSpecialDirectives(el, vNode, ctx);
       this._handleStandardDirectives(el, vNode, ctx);
 
@@ -2532,6 +2535,31 @@
       });
 
       this._handleSubDirectives(el, vNode, ctx);
+
+      // 2. Handle @then directives (can be multiple, separated by ;; or as array)
+      if (vNode.directives && vNode.directives['@then']) {
+        let thenExprs = vNode.directives['@then'];
+        // Support multiple @then separated by ;; or as array
+        if (Array.isArray(thenExprs)) {
+          thenExprs = thenExprs.flat().filter(Boolean);
+        } else if (typeof thenExprs === 'string') {
+          thenExprs = thenExprs.split(/;;|\n/).map(s => s.trim()).filter(Boolean);
+        } else {
+          thenExprs = [thenExprs];
+        }
+        thenExprs.forEach(expr => {
+          try {
+            // Use the same context as @set
+            if (!this.evaluator.executeDirectiveExpression(expr, ctx, null, false)) {
+              const cleanExpr = String(expr).replace(/\bstate\./g, '');
+              new Function('state', 'ctx', `with(state){with(ctx||{}){${cleanExpr}}}`)(this.state, ctx);
+            }
+          } catch (e) {
+            console.error('Error in @then directive:', e, 'Expression:', expr);
+            el.setAttribute('data-ayisha-then-error', e.message);
+          }
+        });
+      }
 
       return el;
     }
