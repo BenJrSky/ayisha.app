@@ -73,7 +73,7 @@
         <div @if="searchType === 'letter'" class="search-form">
             <div class="search-container">
                 <select @model="searchLetter" class="search-input">
-                    <option @for="letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')" @value="letter" @text="letter">
+                    <option @for="letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')" value="{{letter}}" @text="letter">
                     </option>
                 </select>
                 <button @click="loading = true" class="search-btn">⊙ Cerca</button>
