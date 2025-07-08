@@ -62,12 +62,11 @@
                 Loading popular recipes...
             </div>
 
-            <div @for="recipe in popularRecipes" @key="recipe.idMeal" class="recipe-card fade-in"
-                @click="selectedMealId = recipe.idMeal" @link="recipe-detail">
-                <img src="{{recipe.strMealThumb}}" alt="recipe.strMeal" class="recipe-image">
+            <div @for="recipe in popularRecipes" @key="recipe.idMeal" class="recipe-card fade-in">
+                <img src="{{recipe.strMealThumb}}" alt="recipe.strMeal" class="recipe-image" @click="selectedMealId = recipe.idMeal" @link="recipe-detail">
                 <div class="recipe-info">
                     <h3 class="recipe-name" @text="recipe.strMeal"></h3>
-                    <span class="recipe-category" @text="recipe.strCategory"></span>
+                    <span class="recipe-category" @text="recipe.strCategory"@click="selectedCategory = recipe.strCategory" @link="category-meals"></span>
                     <p class="recipe-area">◎ <span @text="recipe.strArea"></span></p>
                 </div>
             </div>

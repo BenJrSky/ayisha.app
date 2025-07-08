@@ -1,3 +1,67 @@
+/* ========== FOOTER ========== */
+.footer {
+    background: #fff;
+    border-top: 1px solid #eee;
+    color: var(--text-dark, #222);
+    padding: 2rem 0 1rem 0;
+    margin-top: 4rem;
+    font-size: 1rem;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.03);
+}
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 900px;
+    margin: 0 auto 1rem auto;
+    gap: 1.5rem;
+}
+.footer-logo img {
+    height: 40px;
+}
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+}
+.footer-links a {
+    color: var(--text-dark, #222);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+.footer-links a:hover {
+    color: var(--primary, #e67e22);
+}
+.footer-social {
+    display: flex;
+    gap: 1rem;
+    font-size: 1.3rem;
+}
+.footer-social a {
+    color: var(--text-dark, #222);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.footer-social a:hover {
+    color: var(--primary, #e67e22);
+}
+.footer-bottom {
+    text-align: center;
+    color: #888;
+    font-size: 0.95rem;
+}
+@media (max-width: 700px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .footer-links {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+}
 /* ========== RECIPE BROWSER STYLES ========== */
 
 * {
