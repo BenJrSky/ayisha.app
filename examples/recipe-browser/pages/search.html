@@ -4,37 +4,32 @@
 
         <!-- Schede di ricerca -->
         <div class="search-tabs">
-            <button @class="{'search-tab': true, 'active': searchType === 'name'}" @click="searchType = 'name'" data-type="name">◐ Per Nome</button>
-            <button @class="{'search-tab': true, 'active': searchType === 'ingredient'}" @click="searchType = 'ingredient'" data-type="ingredient">◎ Per Ingrediente</button>
-            <button @class="{'search-tab': true, 'active': searchType === 'area'}" @click="searchType = 'area'" data-type="area">◒ Per Area</button>
-            <button @class="{'search-tab': true, 'active': searchType === 'letter'}" @click="searchType = 'letter'" data-type="letter">◉ Per Lettera</button>
+            <button @class="{'search-tab': true, 'active': searchType === 'name'}" @click="searchType = 'name'"
+                data-type="name">◐ Per Nome</button>
+            <button @class="{'search-tab': true, 'active': searchType === 'ingredient'}"
+                @click="searchType = 'ingredient'" data-type="ingredient">◎ Per Ingrediente</button>
+            <button @class="{'search-tab': true, 'active': searchType === 'area'}" @click="searchType = 'area'"
+                data-type="area">◒ Per Area</button>
+            <button @class="{'search-tab': true, 'active': searchType === 'letter'}" @click="searchType = 'letter'"
+                data-type="letter">◉ Per Lettera</button>
         </div>
 
         <init>
             loading=false
         </init>
 
-        <!-- Form ricerca per nome -->
-        <div @if="searchType === 'name'" class="search-form">
-            <div class="search-container">
-                <input type="text" @model="searchQuery" class="search-input"
-                    placeholder="Inserisci il nome della ricetta (es. Arrabiata)">
+
+        <div @switch="searchType" class="search-form">
+
+            <div @case="letter" class="search-container">
+                <select @model="searchLetter" class="search-input">
+                    <option @for="letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')" value="{{letter}}" @text="letter">
+                    </option>
+                </select>
                 <button @click="loading = true" class="search-btn">⊙ Cerca</button>
             </div>
-        </div>
 
-        <!-- Form ricerca per ingrediente -->
-        <div @if="searchType === 'ingredient'" class="search-form">
-            <div class="search-container">
-                <input type="text" @model="searchIngredient" class="search-input"
-                    placeholder="Inserisci l'ingrediente (es. chicken)">
-                <button @click="loading = true" class="search-btn">⊙ Cerca</button>
-            </div>
-        </div>
-
-        <!-- Form ricerca per area -->
-        <div @if="searchType === 'area'" class="search-form">
-            <div class="search-container">
+             <div @case="area" class="search-container">
                 <select @model="searchArea" class="search-input">
                     <option value="">Seleziona un'area geografica</option>
                     <option value="Italian">Italiana</option>
@@ -67,24 +62,30 @@
                 </select>
                 <button @click="loading = true" class="search-btn">⊙ Cerca</button>
             </div>
-        </div>
 
-        <!-- Form ricerca per lettera -->
-        <div @if="searchType === 'letter'" class="search-form">
-            <div class="search-container">
-                <select @model="searchLetter" class="search-input">
-                    <option @for="letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')" value="{{letter}}" @text="letter">
-                    </option>
-                </select>
+             <div @case="ingredient" class="search-container">
+                <input type="text" @model="searchIngredient" class="search-input"
+                    placeholder="Inserisci l'ingrediente (es. chicken)">
                 <button @click="loading = true" class="search-btn">⊙ Cerca</button>
             </div>
+
+            <div @case="name" lass="search-container">
+                <input type="text" @model="searchQuery" class="search-input"
+                    placeholder="Inserisci il nome della ricetta (es. Arrabiata)">
+                <button @click="loading = true" class="search-btn">⊙ Cerca</button>
+            </div>
+
         </div>
+
+
+      
     </div>
 
     <!-- Fetch dei risultati in base al tipo di ricerca -->
     <div @if="searchType === 'name' && searchQuery && loading"
         @fetch="https://www.themealdb.com/api/json/v1/1/search.php?s={searchQuery}" @result="searchResultsData"
-        @watch="searchQuery" @then="testThen=searchResultsData.meals.length; pippo=searchResultsData.meals; ben='Ben is Great'"></div>
+        @watch="searchQuery"
+        @then="testThen=searchResultsData.meals.length; pippo=searchResultsData.meals; ben='Ben is Great'" @finally="direttiva=true"></div>
 
     <div @if="searchType === 'ingredient' && searchIngredient && loading"
         @fetch="https://www.themealdb.com/api/json/v1/1/filter.php?i={searchIngredient}" @result="searchResultsData"
@@ -108,7 +109,7 @@
         </h3>
         <div class="recipes-grid">
             <div @for="recipe in searchResultsData?.meals" @key="recipe.idMeal" class="recipe-card fade-in"
-                @click="selectedMealId = recipe.idMeal"  @link="recipe-detail">
+                @click="selectedMealId = recipe.idMeal" @link="recipe-detail">
                 <img src="{{recipe.strMealThumb}}" alt="{{recipe.strMeal}}" class="recipe-image">
                 <div class="recipe-info">
                     <h3 class="recipe-name" @text="recipe.strMeal"></h3>
@@ -125,5 +126,3 @@
         Nessuna ricetta trovata. Prova con altri termini di ricerca.
     </div>
 </div>
-
-

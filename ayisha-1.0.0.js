@@ -715,7 +715,9 @@
         '@focus': `Esempio: <input @focus="doSomething()">`,
         '@blur': `Esempio: <input @blur="doSomething()">`,
         '@change': `Esempio: <input @change="doSomething()">`,
-        '@input': `Esempio: <input @input="doSomething()">`
+        '@input': `Esempio: <input @input="doSomething()">`,
+        '@then': `Esegui una o più espressioni dopo tutte le altre direttive su questo nodo. Esempio: <div @then=\"foo=1;;bar=2\"></div>`,
+        '@finally': `Esegui una o più espressioni dopo tutto, inclusi @then. Esempio: <div @finally=\"foo=1;;bar=2\"></div>`
       };
     }
 
@@ -2440,6 +2442,8 @@
           if (dir === '@attr') continue;
           // Allow @then as a valid directive
           if (dir === '@then') continue;
+          // Allow @finally as a valid directive
+          if (dir === '@finally') continue;
           if (!this.helpSystem.isValidDirective(dir)) {
             unknownDirective = dir;
             break;
@@ -2557,6 +2561,28 @@
           } catch (e) {
             console.error('Error in @then directive:', e, 'Expression:', expr);
             el.setAttribute('data-ayisha-then-error', e.message);
+          }
+        });
+      }
+
+      if (vNode.directives && vNode.directives['@finally']) {
+        let finallyExprs = vNode.directives['@finally'];
+        if (Array.isArray(finallyExprs)) {
+          finallyExprs = finallyExprs.flat().filter(Boolean);
+        } else if (typeof finallyExprs === 'string') {
+          finallyExprs = finallyExprs.split(/;;|\n/).map(s => s.trim()).filter(Boolean);
+        } else {
+          finallyExprs = [finallyExprs];
+        }
+        finallyExprs.forEach(expr => {
+          try {
+            if (!this.evaluator.executeDirectiveExpression(expr, ctx, null, false)) {
+              const cleanExpr = String(expr).replace(/\bstate\./g, '');
+              new Function('state', 'ctx', `with(state){with(ctx||{}){${cleanExpr}}}`)(this.state, ctx);
+            }
+          } catch (e) {
+            console.error('Error in @finally directive:', e, 'Expression:', expr);
+            el.setAttribute('data-ayisha-finally-error', e.message);
           }
         });
       }
