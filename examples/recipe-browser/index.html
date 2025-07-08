@@ -8,35 +8,33 @@
     <script src="../../ayisha-1.0.0.js"></script>
 </head>
 <body>
-    <!-- Inizializzazione dello stato globale -->
     <init>
-        // Stato globale dell'applicazione
-        state.currentPage = 'home';
-        state.quickSearch = '';
-        state.selectedCategory = '';
-        state.selectedMealId = '';
-        state.searchQuery = '';
-        state.searchType = 'name';
-        state.searchIngredient = '';
-        state.searchArea = '';
-        state.searchLetter = 'A';
-        state.popularRecipes = [];
-        state.categories = [];
-        state.categoryMeals = [];
-        state.searchResults = [];
-        state.currentRecipe = null;
-        state.randomMeal = null;
-        state.loading = false;
-        state.error = '';
+        currentPage = 'home';
+        quickSearch = '';
+        selectedCategory = '';
+        selectedMealId = '';
+        searchQuery = '';
+        searchType = 'name';
+        searchIngredient = '';
+        searchArea = '';
+        searchLetter = 'A';
+        popularRecipes = [];
+        categories = [];
+        categoryMeals = [];
+        searchResults = [];
+        currentRecipe = null;
+        randomMeal = null;
+        loading = false;
+        error = '';
         
         // API base URL
-        state.API_BASE = 'https://www.themealdb.com/api/json/v1/1/';
+        API_BASE = 'https://www.themealdb.com/api/json/v1/1/';
     </init>
 
-    <header class="header">
-        <h1>◉ Recipe Browser</h1>
-        <p>Scopri deliziose ricette da tutto il mondo</p>
-    </header>
+
+    <!-- HEADER -->
+    <component @src="./components/header.html"></component>
+    
     <!-- NAV BAR -->
     <component @src="./components/nav.html"></component>
     <!-- PAGINA HOME -->
@@ -52,13 +50,7 @@
      <!-- PAGINA DETTAGLIO RICETTA -->
     <component @src="./pages/recipe-detail.html" @page="recipe-detail"></component>
 
-    <div @state="ben"></div>
-    <div @state="direttiva"></div>
-    <div @state="testThen"></div>
-    <div @state="pippo"></div>
-
     <div @state></div>
-
 
 </body>
 </html>

@@ -1,8 +1,8 @@
   <div class="container">
                 <div class="search-section">
-                    <h2 style="margin-bottom: 1rem; color: var(--text-dark);">Sfoglia per Categoria</h2>
+                    <h2 style="margin-bottom: 1rem; color: var(--text-dark);">Browse by Category</h2>
                     <p style="color: var(--text-light); margin-bottom: 2rem;">
-                        Scegli una categoria per scoprire ricette specifiche. Ogni categoria contiene ricette autentiche e deliziose.
+                        Choose a category to discover specific recipes. Each category contains authentic and delicious recipes.
                     </p>
                 </div>
 
@@ -12,7 +12,7 @@
 
                 <div class="categories-grid">
                     <div @if="!categoriesData.categories || categoriesData.categories.length === 0" class="loading">
-                        Caricamento categorie...
+                        Loading categories...
                     </div>
                     
                     <div @for="category in categoriesData.categories" @key="category.strCategory" class="category-card fade-in"

@@ -1,17 +1,17 @@
 <div class="container">
     <div class="search-section">
-        <h2>Trova la tua ricetta ideale</h2>
+        <h2>Find your ideal recipe</h2>
 
         <!-- Schede di ricerca -->
         <div class="search-tabs">
             <button @class="{'search-tab': true, 'active': searchType === 'name'}" @click="searchType = 'name'"
-                data-type="name">◐ Per Nome</button>
+                data-type="name">◐ By Name</button>
             <button @class="{'search-tab': true, 'active': searchType === 'ingredient'}"
-                @click="searchType = 'ingredient'" data-type="ingredient">◎ Per Ingrediente</button>
+                @click="searchType = 'ingredient'" data-type="ingredient">◎ By Ingredient</button>
             <button @class="{'search-tab': true, 'active': searchType === 'area'}" @click="searchType = 'area'"
-                data-type="area">◒ Per Area</button>
+                data-type="area">◒ By Area</button>
             <button @class="{'search-tab': true, 'active': searchType === 'letter'}" @click="searchType = 'letter'"
-                data-type="letter">◉ Per Lettera</button>
+                data-type="letter">◉ By Letter</button>
         </div>
 
         <init>
@@ -26,53 +26,53 @@
                     <option @for="letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')" value="{{letter}}" @text="letter">
                     </option>
                 </select>
-                <button @click="loading = true" class="search-btn">⊙ Cerca</button>
+                <button @click="loading = true" class="search-btn">⊙ Search</button>
             </div>
 
              <div @case="area" class="search-container">
                 <select @model="searchArea" class="search-input">
-                    <option value="">Seleziona un'area geografica</option>
-                    <option value="Italian">Italiana</option>
-                    <option value="American">Americana</option>
-                    <option value="British">Britannica</option>
-                    <option value="Canadian">Canadese</option>
-                    <option value="Chinese">Cinese</option>
-                    <option value="Croatian">Croata</option>
-                    <option value="Dutch">Olandese</option>
-                    <option value="Egyptian">Egiziana</option>
-                    <option value="French">Francese</option>
-                    <option value="Greek">Greca</option>
-                    <option value="Indian">Indiana</option>
-                    <option value="Irish">Irlandese</option>
-                    <option value="Japanese">Giapponese</option>
-                    <option value="Jamaican">Giamaicana</option>
-                    <option value="Kenyan">Keniota</option>
-                    <option value="Malaysian">Malese</option>
-                    <option value="Mexican">Messicana</option>
-                    <option value="Moroccan">Marocchina</option>
-                    <option value="Polish">Polacca</option>
-                    <option value="Portuguese">Portoghese</option>
-                    <option value="Russian">Russa</option>
-                    <option value="Spanish">Spagnola</option>
+                    <option value="">Select an area</option>
+                    <option value="Italian">Italian</option>
+                    <option value="American">American</option>
+                    <option value="British">British</option>
+                    <option value="Canadian">Canadian</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Croatian">Croatian</option>
+                    <option value="Dutch">Dutch</option>
+                    <option value="Egyptian">Egyptian</option>
+                    <option value="French">French</option>
+                    <option value="Greek">Greek</option>
+                    <option value="Indian">Indian</option>
+                    <option value="Irish">Irish</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Jamaican">Jamaican</option>
+                    <option value="Kenyan">Kenyan</option>
+                    <option value="Malaysian">Malaysian</option>
+                    <option value="Mexican">Mexican</option>
+                    <option value="Moroccan">Moroccan</option>
+                    <option value="Polish">Polish</option>
+                    <option value="Portuguese">Portuguese</option>
+                    <option value="Russian">Russian</option>
+                    <option value="Spanish">Spanish</option>
                     <option value="Thai">Thai</option>
-                    <option value="Tunisian">Tunisina</option>
-                    <option value="Turkish">Turca</option>
-                    <option value="Unknown">Sconosciuta</option>
-                    <option value="Vietnamese">Vietnamita</option>
+                    <option value="Tunisian">Tunisian</option>
+                    <option value="Turkish">Turkish</option>
+                    <option value="Unknown">Unknown</option>
+                    <option value="Vietnamese">Vietnamese</option>
                 </select>
-                <button @click="loading = true" class="search-btn">⊙ Cerca</button>
+                <button @click="loading = true" class="search-btn">⊙ Search</button>
             </div>
 
-             <div @case="ingredient" class="search-container">
+            <div @case="ingredient" class="search-container">
                 <input type="text" @model="searchIngredient" class="search-input"
-                    placeholder="Inserisci l'ingrediente (es. chicken)">
-                <button @click="loading = true" class="search-btn">⊙ Cerca</button>
+                    placeholder="Enter the ingredient (e.g. chicken)">
+                <button @click="loading = true" class="search-btn">⊙ Search</button>
             </div>
 
             <div @case="name" lass="search-container">
                 <input type="text" @model="searchQuery" class="search-input"
-                    placeholder="Inserisci il nome della ricetta (es. Arrabiata)">
-                <button @click="loading = true" class="search-btn">⊙ Cerca</button>
+                    placeholder="Enter the recipe name (e.g. Arrabiata)">
+                <button @click="loading = true" class="search-btn">⊙ Search</button>
             </div>
 
         </div>
@@ -83,20 +83,25 @@
 
     <!-- Fetch dei risultati in base al tipo di ricerca -->
     <div @if="searchType === 'name' && searchQuery && loading"
-        @fetch="https://www.themealdb.com/api/json/v1/1/search.php?s={searchQuery}" @result="searchResultsData"
+        @fetch="https://www.themealdb.com/api/json/v1/1/search.php?s={searchQuery}" 
+        @result="searchResultsData"
         @watch="searchQuery"
-        @then="testThen=searchResultsData.meals.length; pippo=searchResultsData.meals; ben='Ben is Great'" @finally="direttiva=true"></div>
+        @then="testThen=searchResultsData.meals.length; pippo=searchResultsData.meals; ben='Ben is Great'" 
+        @finally="direttiva=true"></div>
 
     <div @if="searchType === 'ingredient' && searchIngredient && loading"
-        @fetch="https://www.themealdb.com/api/json/v1/1/filter.php?i={searchIngredient}" @result="searchResultsData"
+        @fetch="https://www.themealdb.com/api/json/v1/1/filter.php?i={searchIngredient}" 
+        @result="searchResultsData"
         @watch="searchIngredient"></div>
 
     <div @if="searchType === 'area' && searchArea && loading"
-        @fetch="`https://www.themealdb.com/api/json/v1/1/filter.php?a=${searchArea}`" @result="searchResultsData"
+        @fetch="`https://www.themealdb.com/api/json/v1/1/filter.php?a=${searchArea}`" 
+        @result="searchResultsData"
         @watch="searchArea"></div>
 
     <div @if="searchType === 'letter' && searchLetter && loading"
-        @fetch="`https://www.themealdb.com/api/json/v1/1/search.php?f=${searchLetter}`" @result="searchResultsData"
+        @fetch="`https://www.themealdb.com/api/json/v1/1/search.php?f=${searchLetter}`" 
+        @result="searchResultsData"
         @watch="searchLetter"></div>
 
     <!-- Processing dei risultati -->
@@ -105,7 +110,7 @@
     <!-- Mostra i risultati -->
     <div @if="searchResultsData?.meals && searchResultsData?.meals.length > 0">
         <h3 style="margin: 2rem 0; color: var(--text-dark);">
-            Trovate <span @text="searchResultsData?.meals.length"></span> ricette
+            Found <span @text="searchResultsData?.meals.length"></span> recipes
         </h3>
         <div class="recipes-grid">
             <div @for="recipe in searchResultsData?.meals" @key="recipe.idMeal" class="recipe-card fade-in"
@@ -120,9 +125,9 @@
         </div>
     </div>
 
-    <div @if="loading" class="loading">Ricerca in corso...</div>
+    <div @if="loading" class="loading">Searching...</div>
     <div @if="!loading && searchResultsData?.meals && searchResultsData?.meals.length === 0 && (searchQuery || searchIngredient || searchArea || searchLetter)"
         class="error">
-        Nessuna ricetta trovata. Prova con altri termini di ricerca.
+        No recipes found. Try other search terms.
     </div>
 </div>

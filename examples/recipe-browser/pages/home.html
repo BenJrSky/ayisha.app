@@ -1,57 +1,49 @@
   <div class="container">
-                <!-- Sezione di benvenuto -->
-                <div class="search-section">
-                    <h2 style="margin-bottom: 1rem; color: var(--text-dark);">Benvenuto nel mondo delle ricette!</h2>
-                    <p style="color: var(--text-light); margin-bottom: 2rem; font-size: 1.1rem;">
-                        Esplora migliaia di ricette da tutto il mondo. Cerca per nome, sfoglia per categoria o lasciati sorprendere da una ricetta casuale.
-                    </p>
-                    
-                    <!-- Ricerca rapida -->
-                    <div class="search-container">
-                        <input type="text" @model="quickSearch" class="search-input" placeholder="Cerca una ricetta...">
-                        <button @click="searchQuery = quickSearch; currentPage = 'search'; quickSearch = ''" @link="search" class="search-btn">⊙ Cerca</button>
-                    </div>
-                </div>
+               
 
-                <!-- Sezioni principali -->
+                <component @src="./components/search-section.html"></component>
+                <component @src="./random.html"></component>
+
+
+                <!-- Main sections -->
                 <div class="categories-grid">
                     <div class="category-card" @click="currentPage = 'categories'">
-                        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=200&fit=crop" alt="Categorie" class="category-image">
+                        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=400&h=200&fit=crop" alt="Categories" class="category-image">
                         <div class="category-info">
-                            <h3 class="category-name">⊞ Esplora Categorie</h3>
+                            <h3 class="category-name">⊞ Explore Categories</h3>
                             <p class="category-description">
-                                Sfoglia le ricette per categoria: antipasti, primi piatti, dolci e molto altro. 
-                                Trova facilmente quello che stai cercando.
+                                Browse recipes by category: appetizers, main courses, desserts, and much more.
+                                Easily find what you're looking for.
                             </p>
                         </div>
                     </div>
 
                     <div class="category-card" @click="currentPage = 'search'">
-                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop" alt="Ricerca" class="category-image">
+                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=200&fit=crop" alt="Search" class="category-image">
                         <div class="category-info">
-                            <h3 class="category-name">⊙ Ricerca Avanzata</h3>
+                            <h3 class="category-name">⊙ Advanced Search</h3>
                             <p class="category-description">
-                                Cerca ricette per nome, ingrediente principale o area geografica. 
-                                Filtri avanzati per trovare esattamente quello che desideri.
+                                Search recipes by name, main ingredient, or area.
+                                Advanced filters to find exactly what you want.
                             </p>
                         </div>
                     </div>
 
                     <div class="category-card" @click="currentPage = 'random'">
-                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop" alt="Casuale" class="category-image">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=200&fit=crop" alt="Random" class="category-image">
                         <div class="category-info">
-                            <h3 class="category-name">⊛ Ricetta Casuale</h3>
+                            <h3 class="category-name">⊛ Random Recipe</h3>
                             <p class="category-description">
-                                Non sai cosa cucinare? Lasciati ispirare da una ricetta scelta casualmente. 
-                                Perfetto per scoprire nuovi sapori!
+                                Not sure what to cook? Get inspired by a randomly selected recipe.
+                                Perfect for discovering new flavors!
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Ricette popolari -->
+                <!-- Popular recipes -->
                 <div style="margin-top: 4rem;">
-                    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-dark);">◐ Ricette Popolari</h2>
+                    <h2 style="text-align: center; margin-bottom: 2rem; color: var(--text-dark);">◐ Popular Recipes</h2>
                     
                     <!-- Carica 6 ricette casuali come popolari -->
                     <div @fetch="https://www.themealdb.com/api/json/v1/1/random.php" @result="randomRecipe1"></div>
@@ -68,7 +60,7 @@
                     
                     <div class="recipes-grid">
                         <div @if="!popularRecipes || popularRecipes.length === 0" class="loading">
-                            Caricamento ricette popolari...
+                            Loading popular recipes...
                         </div>
                         
                         <div @for="recipe in popularRecipes" @key="recipe.idMeal" class="recipe-card fade-in" 

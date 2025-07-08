@@ -1,10 +1,10 @@
      <div class="container">
                 <div class="search-section">
                     <h2 style="margin-bottom: 1rem; color: var(--text-dark);">
-                        Ricette: <span @text="selectedCategory"></span>
+                        Recipes: <span @text="selectedCategory"></span>
                     </h2>
                     <button @link="categories" class="search-btn" style="margin-bottom: 2rem;">
-                        ← Torna alle categorie
+                        ← Back to categories
                     </button>
                 </div>
 
@@ -13,7 +13,7 @@
 
                 <div class="recipes-grid">
                     <div @if="!categoryMealsData.meals || categoryMealsData.meals.length === 0" class="loading">
-                        Caricamento ricette...
+                        Loading recipes...
                     </div>
                     
                     <div @for="meal in categoryMealsData.meals" @key="meal.idMeal" class="recipe-card fade-in"

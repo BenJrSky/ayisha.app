@@ -1,11 +1,11 @@
 <div class="container">
                 <div class="search-section text-center">
-                    <h2 style="margin-bottom: 2rem; color: var(--text-dark);">⊛ Ricetta Casuale</h2>
+                    <h2 style="margin-bottom: 2rem; color: var(--text-dark);">⦛ Random Recipe</h2>
                     <p style="color: var(--text-light); margin-bottom: 2rem;">
-                        Lasciati ispirare da una ricetta scelta casualmente!
+                        Get inspired by a randomly selected recipe!
                     </p>
                     <button @click="randomMeal = null" class="search-btn" style="margin-bottom: 2rem;">
-                        🎲 Nuova ricetta casuale
+                        🎲 New random recipe
                     </button>
                 </div>
 
@@ -23,11 +23,11 @@
                                 <span class="recipe-area">◎ <span @text="randomMeal.strArea"></span></span>
                             </div>
                             <button @click="selectedMealId = randomMeal.idMeal; currentPage = 'recipe-detail'" class="search-btn">
-                                Vedi ricetta completa
+                                View full recipe
                             </button>
                         </div>
                     </div>
                 </div>
 
-                <div @if="!randomMeal" class="loading">Caricamento ricetta casuale...</div>
+                <div @if="!randomMeal" class="loading">Loading random recipe...</div>
             </div>
