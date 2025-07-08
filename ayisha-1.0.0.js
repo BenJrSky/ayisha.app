@@ -406,7 +406,7 @@
       if (this.debugMode) {
         console.log(`🔄 ComponentManager: Loading component ${url}`);
       }
-      
+
       // Return cached component if available
       if (this.cache[url]) {
         if (this.debugMode) {
@@ -414,7 +414,7 @@
         }
         return this.cache[url];
       }
-      
+
       // If already loading, return the existing promise
       if (this.loadingComponents.has(url)) {
         if (this.debugMode) {
@@ -422,11 +422,11 @@
         }
         return this.loadingComponents.get(url);
       }
-      
+
       // Create and store the loading promise
       const loadingPromise = this._fetchComponent(url);
       this.loadingComponents.set(url, loadingPromise);
-      
+
       try {
         const html = await loadingPromise;
         this.cache[url] = html;
@@ -447,17 +447,17 @@
       if (this.debugMode) {
         console.log(`🌐 ComponentManager: Fetching ${url}`);
       }
-      
+
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
       const html = await response.text();
-      
+
       if (this.debugMode) {
         console.log(`📄 ComponentManager: Received ${html.length} characters from ${url}`);
       }
-      
+
       return html;
     }
 
@@ -1612,7 +1612,7 @@
       const rules = [];
       let currentRule = '';
       let inRegex = false;
-      
+
       for (let i = 0; i < rulesStr.length; i++) {
         const char = rulesStr[i];
         if (char === '^' && !inRegex) {
@@ -1632,12 +1632,12 @@
           currentRule += char;
         }
       }
-      
+
       // Add the last rule if any
       if (currentRule.trim()) {
         rules.push(currentRule.trim());
       }
-      
+
       if (!modelVar) {
         return;
       }
@@ -1834,33 +1834,33 @@
 
         // Trasforma "foo = ..." in "state.foo = ..." solo se non già prefissato
         let transformed = cleanCode;
-        
+
         // Applica la trasformazione solo alle righe che non contengono parole chiave JS
         const lines = transformed.split('\n');
         const transformedLines = lines.map(line => {
           const trimmedLine = line.trim();
-          
+
           // Skip empty lines, comments, and control structures
-          if (!trimmedLine || 
-              trimmedLine.startsWith('//') || 
-              trimmedLine.startsWith('/*') ||
-              trimmedLine.startsWith('function') ||
-              trimmedLine.includes('function(') ||
-              trimmedLine.includes('=>') ||
-              /^(if|else|for|while|switch|case|default|try|catch|finally|return|var|let|const)\b/.test(trimmedLine)) {
+          if (!trimmedLine ||
+            trimmedLine.startsWith('//') ||
+            trimmedLine.startsWith('/*') ||
+            trimmedLine.startsWith('function') ||
+            trimmedLine.includes('function(') ||
+            trimmedLine.includes('=>') ||
+            /^(if|else|for|while|switch|case|default|try|catch|finally|return|var|let|const)\b/.test(trimmedLine)) {
             return line;
           }
-          
+
           // Transform assignment statements: "foo = ..." to "state.foo = ..."
           // But only if not already prefixed with state, this, window, etc.
           const assignmentMatch = trimmedLine.match(/^([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=\s*(.+)$/);
-          if (assignmentMatch && 
-              !trimmedLine.includes('state.') && 
-              !trimmedLine.includes('this.') &&
-              !trimmedLine.includes('window.') &&
-              !trimmedLine.includes('console.') &&
-              !trimmedLine.includes('localStorage.') &&
-              !trimmedLine.includes('sessionStorage.')) {
+          if (assignmentMatch &&
+            !trimmedLine.includes('state.') &&
+            !trimmedLine.includes('this.') &&
+            !trimmedLine.includes('window.') &&
+            !trimmedLine.includes('console.') &&
+            !trimmedLine.includes('localStorage.') &&
+            !trimmedLine.includes('sessionStorage.')) {
             const [, varName, value] = assignmentMatch;
             // Don't transform JavaScript globals
             const jsGlobals = ['JSON', 'Object', 'Array', 'String', 'Number', 'Boolean', 'Date', 'Math', 'RegExp'];
@@ -1868,10 +1868,10 @@
               return line.replace(assignmentMatch[0], `state.${varName} = ${value}`);
             }
           }
-          
+
           return line;
         });
-        
+
         transformed = transformedLines.join('\n');
 
         try {
@@ -1945,13 +1945,13 @@
     async preloadComponents() {
       const componentPromises = [];
       const processedUrls = new Set();
-      
+
       // Trova tutti i tag component
       const componentElements = this.root.querySelectorAll('component');
-      
+
       componentElements.forEach(el => {
         let srcUrl = null;
-        
+
         // Controlla sia 'src' che '@src'
         if (el.hasAttribute('src')) {
           srcUrl = el.getAttribute('src');
@@ -1972,7 +1972,7 @@
             }
           }
         }
-        
+
         // Se abbiamo un URL valido e non è già stato processato
         if (srcUrl && !processedUrls.has(srcUrl) && !this.componentManager.getCachedComponent(srcUrl)) {
           processedUrls.add(srcUrl);
@@ -1986,9 +1986,9 @@
           const results = await Promise.allSettled(componentPromises);
           const successful = results.filter(r => r.status === 'fulfilled').length;
           const failed = results.filter(r => r.status === 'rejected').length;
-          
+
           console.log(`Components preloaded: ${successful} successful, ${failed} failed`);
-          
+
           if (failed > 0) {
             console.warn('Failed components:', results.filter(r => r.status === 'rejected').map(r => r.reason));
           }
@@ -2411,11 +2411,8 @@
     _renderVNode(vNode, ctx) {
       if (!vNode) return null;
 
-      if (vNode.directives && vNode.directives['@page'] !== undefined) {
-        if (this.state._currentPage !== vNode.directives['@page']) {
-          return null;
-        }
-      }
+      // Sposta la logica di filtro @page DOPO il caricamento/caching del componente
+      // In questo modo tutti i componenti vengono fetchati/cachati, ma solo quello attivo viene renderizzato
 
       Object.entries(vNode.directives || {}).forEach(([dir, expr]) => {
         if (/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(expr.trim())) {
@@ -2503,6 +2500,14 @@
       }
 
       if (vNode.tag === 'component') {
+        if (vNode.directives['@page']) {
+          const pageName = vNode.directives['@page'];
+          const currentPage = this.state._currentPage || this.state.currentPage;
+          if (String(pageName) !== String(currentPage)) {
+            this._handleComponentDirective(vNode, ctx);
+            return null;
+          }
+        }
         return this._handleComponentDirective(vNode, ctx);
       }
 
@@ -2700,92 +2705,92 @@
       return null;
     }
 
-_handleComponentDirective(vNode, ctx) {
-  if (!vNode.directives['@src']) {
-    return this.errorHandler.createErrorElement(`Error: <b>&lt;component&gt;</b> requires the <b>@src</b> attribute`);
-  }
+    _handleComponentDirective(vNode, ctx) {
+      if (!vNode.directives['@src']) {
+        return this.errorHandler.createErrorElement(`Error: <b>&lt;component&gt;</b> requires the <b>@src</b> attribute`);
+      }
 
-  let srcUrl = null;
-  try {
-    srcUrl = this.evaluator.evalExpr(vNode.directives['@src'], ctx);
-  } catch (e) {
-    console.warn('Error evaluating @src:', e);
-  }
+      let srcUrl = null;
+      try {
+        srcUrl = this.evaluator.evalExpr(vNode.directives['@src'], ctx);
+      } catch (e) {
+        console.warn('Error evaluating @src:', e);
+      }
 
-  if (!srcUrl) {
-    const rawSrc = vNode.directives['@src'].trim();
-    if (/^['\"].*['\"]$/.test(rawSrc)) {
-      srcUrl = rawSrc.slice(1, -1);
-    } else {
-      srcUrl = rawSrc;
-    }
-  }
-
-  if (!srcUrl || srcUrl === 'undefined' || srcUrl === 'null') {
-    return this.errorHandler.createErrorElement(`Error: Invalid component URL`);
-  }
-
-  // Risolvi path relativi
-  if (srcUrl.startsWith('./')) {
-    // Rimuovi il ./ iniziale
-    srcUrl = srcUrl.substring(2);
-  }
-
-  console.log(`ComponentManager: Attempting to load component from ${srcUrl}`);
-
-  // Se già in cache, mostra subito
-  if (this.componentManager.getCachedComponent(srcUrl)) {
-    console.log(`ComponentManager: Component ${srcUrl} found in cache`);
-    const componentHtml = this.componentManager.getCachedComponent(srcUrl);
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = componentHtml;
-    this._processComponentInitBlocks(tempDiv);
-    const componentVNode = this.parse(tempDiv);
-    if (componentVNode && componentVNode.children) {
-      const frag = document.createDocumentFragment();
-      componentVNode.children.forEach(child => {
-        const node = this._renderVNode(child, ctx);
-        if (node) frag.appendChild(node);
-      });
-      return frag;
-    }
-  }
-
-  // Se il componente non è in cache, avvia il caricamento
-  if (!this.componentManager.getCachedComponent(srcUrl)) {
-    console.log(`ComponentManager: Starting load for ${srcUrl}`);
-    this.componentManager.loadExternalComponent(srcUrl).then(html => {
-      if (html) {
-        console.log(`ComponentManager: Successfully loaded component ${srcUrl} (${html.length} chars)`);
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = html;
-        this._processComponentInitBlocks(tempDiv);
-        // Il caricamento è gestito dal ComponentManager
-        if (!this._isRendering) {
-          // Usa un debounce per evitare troppi re-render
-          clearTimeout(this._componentRenderTimeout);
-          this._componentRenderTimeout = setTimeout(() => this.render(), 10);
+      if (!srcUrl) {
+        const rawSrc = vNode.directives['@src'].trim();
+        if (/^['\"].*['\"]$/.test(rawSrc)) {
+          srcUrl = rawSrc.slice(1, -1);
+        } else {
+          srcUrl = rawSrc;
         }
-      } else {
-        console.error(`ComponentManager: Failed to load component ${srcUrl}`);
       }
-    }).catch(err => {
-      console.error('Error loading component:', err);
-      this.componentManager.cache[srcUrl] = `<div class='component-error' style='padding: 10px; background: #ffe6e6; border: 1px solid #ff6b6b; border-radius: 4px; color: #d32f2f;'>Errore: ${err.message}</div>`;
-      if (!this._isRendering) {
-        clearTimeout(this._componentRenderTimeout);
-        this._componentRenderTimeout = setTimeout(() => this.render(), 10);
-      }
-    });
-  }
 
-  // Placeholder di caricamento più elegante
-  const placeholder = document.createElement('div');
-  placeholder.className = 'component-loading';
-  placeholder.style.cssText = 'padding: 10px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; color: #6c757d; font-size: 14px; text-align: center;';
-  placeholder.innerHTML = `� Loading component: <code>${srcUrl}</code>`;
-  return placeholder;
-}
+      if (!srcUrl || srcUrl === 'undefined' || srcUrl === 'null') {
+        return this.errorHandler.createErrorElement(`Error: Invalid component URL`);
+      }
+
+      // Risolvi path relativi
+      if (srcUrl.startsWith('./')) {
+        // Rimuovi il ./ iniziale
+        srcUrl = srcUrl.substring(2);
+      }
+
+      console.log(`ComponentManager: Attempting to load component from ${srcUrl}`);
+
+      // Se già in cache, mostra subito
+      if (this.componentManager.getCachedComponent(srcUrl)) {
+        console.log(`ComponentManager: Component ${srcUrl} found in cache`);
+        const componentHtml = this.componentManager.getCachedComponent(srcUrl);
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = componentHtml;
+        this._processComponentInitBlocks(tempDiv);
+        const componentVNode = this.parse(tempDiv);
+        if (componentVNode && componentVNode.children) {
+          const frag = document.createDocumentFragment();
+          componentVNode.children.forEach(child => {
+            const node = this._renderVNode(child, ctx);
+            if (node) frag.appendChild(node);
+          });
+          return frag;
+        }
+      }
+
+      // Se il componente non è in cache, avvia il caricamento
+      if (!this.componentManager.getCachedComponent(srcUrl)) {
+        console.log(`ComponentManager: Starting load for ${srcUrl}`);
+        this.componentManager.loadExternalComponent(srcUrl).then(html => {
+          if (html) {
+            console.log(`ComponentManager: Successfully loaded component ${srcUrl} (${html.length} chars)`);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            this._processComponentInitBlocks(tempDiv);
+            // Il caricamento è gestito dal ComponentManager
+            if (!this._isRendering) {
+              // Usa un debounce per evitare troppi re-render
+              clearTimeout(this._componentRenderTimeout);
+              this._componentRenderTimeout = setTimeout(() => this.render(), 10);
+            }
+          } else {
+            console.error(`ComponentManager: Failed to load component ${srcUrl}`);
+          }
+        }).catch(err => {
+          console.error('Error loading component:', err);
+          this.componentManager.cache[srcUrl] = `<div class='component-error' style='padding: 10px; background: #ffe6e6; border: 1px solid #ff6b6b; border-radius: 4px; color: #d32f2f;'>Errore: ${err.message}</div>`;
+          if (!this._isRendering) {
+            clearTimeout(this._componentRenderTimeout);
+            this._componentRenderTimeout = setTimeout(() => this.render(), 10);
+          }
+        });
+      }
+
+      // Placeholder di caricamento più elegante
+      const placeholder = document.createElement('div');
+      placeholder.className = 'component-loading';
+      placeholder.style.cssText = 'padding: 10px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; color: #6c757d; font-size: 14px; text-align: center;';
+      placeholder.innerHTML = `� Loading component: <code>${srcUrl}</code>`;
+      return placeholder;
+    }
 
     _processComponentInitBlocks(tempDiv) {
       // Process all init blocks in the component before parsing
@@ -2827,33 +2832,33 @@ _handleComponentDirective(vNode, ctx) {
 
         // Trasforma "foo = ..." in "state.foo = ..." solo se non già prefissato
         let transformed = cleanCode;
-        
+
         // Applica la trasformazione solo alle righe che non contengono parole chiave JS
         const lines = transformed.split('\n');
         const transformedLines = lines.map(line => {
           const trimmedLine = line.trim();
-          
+
           // Skip empty lines, comments, and control structures
-          if (!trimmedLine || 
-              trimmedLine.startsWith('//') || 
-              trimmedLine.startsWith('/*') ||
-              trimmedLine.startsWith('function') ||
-              trimmedLine.includes('function(') ||
-              trimmedLine.includes('=>') ||
-              /^(if|else|for|while|switch|case|default|try|catch|finally|return|var|let|const)\b/.test(trimmedLine)) {
+          if (!trimmedLine ||
+            trimmedLine.startsWith('//') ||
+            trimmedLine.startsWith('/*') ||
+            trimmedLine.startsWith('function') ||
+            trimmedLine.includes('function(') ||
+            trimmedLine.includes('=>') ||
+            /^(if|else|for|while|switch|case|default|try|catch|finally|return|var|let|const)\b/.test(trimmedLine)) {
             return line;
           }
-          
+
           // Transform assignment statements: "foo = ..." to "state.foo = ..."
           // But only if not already prefixed with state, this, window, etc.
           const assignmentMatch = trimmedLine.match(/^([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=\s*(.+)$/);
-          if (assignmentMatch && 
-              !trimmedLine.includes('state.') && 
-              !trimmedLine.includes('this.') &&
-              !trimmedLine.includes('window.') &&
-              !trimmedLine.includes('console.') &&
-              !trimmedLine.includes('localStorage.') &&
-              !trimmedLine.includes('sessionStorage.')) {
+          if (assignmentMatch &&
+            !trimmedLine.includes('state.') &&
+            !trimmedLine.includes('this.') &&
+            !trimmedLine.includes('window.') &&
+            !trimmedLine.includes('console.') &&
+            !trimmedLine.includes('localStorage.') &&
+            !trimmedLine.includes('sessionStorage.')) {
             const [, varName, value] = assignmentMatch;
             // Don't transform JavaScript globals
             const jsGlobals = ['JSON', 'Object', 'Array', 'String', 'Number', 'Boolean', 'Date', 'Math', 'RegExp'];
@@ -2861,10 +2866,10 @@ _handleComponentDirective(vNode, ctx) {
               return line.replace(assignmentMatch[0], `state.${varName} = ${value}`);
             }
           }
-          
+
           return line;
         });
-        
+
         transformed = transformedLines.join('\n');
 
         try {
@@ -3432,9 +3437,7 @@ _handleComponentDirective(vNode, ctx) {
         });
       }
 
-      if (vNode.directives['@page'] && this.state._currentPage !== vNode.directives['@page']) {
-        return null;
-      }
+      // RIMOSSO: la logica di esclusione per @page è ora gestita in _renderVNode
 
       if (vNode.directives['@animate']) {
         const animationClass = vNode.directives['@animate'];
@@ -3732,7 +3735,7 @@ _handleComponentDirective(vNode, ctx) {
       this.reactivitySystem.enableWatchers();
       this._setupRouting();
       this.router.setupCurrentPageProperty();
-      
+
       // Precarica i componenti in background - non bloccante
       this.preloadComponents().then(() => {
         console.log('Component preloading completed, triggering re-render');
@@ -3740,7 +3743,7 @@ _handleComponentDirective(vNode, ctx) {
           this.render();
         }
       });
-      
+
       // Primo render immediato
       this.render();
 
